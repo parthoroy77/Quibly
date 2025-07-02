@@ -1,0 +1,36 @@
+{
+  "name": "@quibly/database",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "migrate": "npx prisma migrate dev",
+    "generate": "npx prisma generate",
+    "format": "npx prisma migrate dev",
+    "studio": "npx prisma studio --schema=./schema --browser none",
+    "prebuild": "pnpm run generate",
+    "predev": "pnpm run generate"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^20",
+    "prisma": "^6.11.0",
+    "tsx": "^4.20.3",
+    "typescript": "^5.8.3",
+    "@quibly/eslint-config": "workspace:^",
+    "@quibly/typescript-config": "workspace:*"
+  },
+  "dependencies": {
+    "@prisma/client": "6.11.0"
+  },
+  "prisma": {
+    "schema": "./schema",
+    "generated": "./src/generated"
+  },
+  "exports": {
+    "./client": "./src/client.ts",
+    ".": "./src/index.ts"
+  }
+}
