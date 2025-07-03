@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import db from "@quibly/database";
 import colors from "colors";
 import { Server } from "http";

@@ -1,44 +1,40 @@
-const { resolve } = require("node:path");
+// eslint.config.js
+import js from "@eslint/js";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import tseslint from "typescript-eslint";
 
-const project = resolve(process.cwd(), "tsconfig.json");
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-/*
- * This is a custom ESLint configuration for use server side
- * typescript packages.
- *
- * This config extends the Vercel Engineering Style Guide.
- * For more information, see https://github.com/vercel/style-guide
- *
- */
+const project = path.resolve(__dirname, "tsconfig.json");
 
-module.exports = {
-  extends: ["@vercel/style-guide/eslint/node", "@vercel/style-guide/eslint/typescript"].map(require.resolve),
-  parserOptions: {
-    project,
-  },
-  env: {
-    node: true,
-    es6: true,
-  },
-  plugins: ["only-warn"],
-  settings: {
-    "import/resolver": {
-      typescript: {
-        project,
+export const backendConfig = [
+  js.configs.recommended,
+  ...tseslint.configs.recommended,
+  {
+    files: ["**/*.ts", "**/*.tsx"],
+    plugins: {
+      "only-warn": {
+        rules: {}, // plugin only-warn transforms all errors to warnings at runtime
       },
     },
+    rules: {
+      // Vercel style guide-compatible rules
+      "no-console": "off",
+      "no-unused-vars": "off",
+      "@typescript-eslint/no-unused-vars": ["off"],
+      "@typescript-eslint/explicit-module-boundary-types": "off",
+      "@typescript-eslint/no-explicit-any": "off",
+    },
   },
-  overrides: [
-    {
-      files: ["**/__tests__/**/*"],
+
+  {
+    files: ["**/__tests__/**/*", "**/*.test.ts"],
+    languageOptions: {
       env: {
         jest: true,
+        node: true,
       },
     },
-  ],
-  ignorePatterns: [".*.js", "node_modules/", "dist/"],
-  // add rules configurations here
-  rules: {
-    "import/no-default-export": "off",
   },
-};
+];

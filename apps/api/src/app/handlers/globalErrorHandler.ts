@@ -8,7 +8,6 @@ import handleApiError from "./handleAppError";
 import { handlePrismaError } from "./handlePrismaErrors";
 import handleZodError from "./handleZodError";
 
-// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
 const globalErrorHandler: ErrorRequestHandler = (error, _req, res, _next) => {
   const success = false;
   let statusCode = 500;
