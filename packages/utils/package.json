@@ -1,0 +1,19 @@
+{
+  "name": "@quibly/utils",
+  "version": "1.0.0",
+  "dependencies": {
+    "@hookform/resolvers": "^5.1.1",
+    "react-hook-form": "^7.59.0",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@quibly/typescript-config": "workspace:*"
+  },
+  "exports": {
+    "./constants": "./src/constants/index.constant.ts",
+    "./validations": "./src/validations/index.validation.ts",
+    "./functions": "./src/functions/index.function.ts",
+    "./types": "./src/types/index.ts",
+    "./hook-form": "./src/validations/react-hook-form.ts"
+  }
+}
