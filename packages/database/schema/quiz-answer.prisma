@@ -1,0 +1,59 @@
+model CorrectAnswer {
+  id                String  @id @default(cuid())
+  questionId        String  @unique
+  optionId          String?
+  textAnswer        String?
+  acceptableAnswers String?
+
+  // timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  question Question        @relation(fields: [questionId], references: [id])
+  option   QuestionOption? @relation(fields: [optionId], references: [id])
+
+  @@map("CorrectAnswers")
+}
+
+model CorrectMultiSelectOption {
+  questionId String
+  optionId   String
+
+  question Question       @relation(fields: [questionId], references: [id])
+  option   QuestionOption @relation(fields: [optionId], references: [id])
+
+  @@id([questionId, optionId])
+  @@map("CorrectMultiSelectOptions")
+}
+
+model StudentAnswer {
+  id                  String   @id @default(cuid())
+  participantId       String
+  sessionId           String
+  questionId          String
+  submittedAt         DateTime @default(now())
+  isCorrect           Boolean?
+  scoreEarned         Int?
+  selectedOptionId    String?
+  submittedTextAnswer String?
+
+  participant        QuizParticipant            @relation(fields: [participantId], references: [id])
+  session            QuizSession                @relation(fields: [sessionId], references: [id])
+  question           Question                   @relation(fields: [questionId], references: [id])
+  selectedOption     QuestionOption?            @relation(fields: [selectedOptionId], references: [id])
+  multiSelectAnswers StudentMultiSelectAnswer[]
+
+  @@unique([participantId, questionId])
+  @@map("StudentAnswers")
+}
+
+model StudentMultiSelectAnswer {
+  studentAnswerId  String
+  selectedOptionId String
+
+  studentAnswer  StudentAnswer  @relation(fields: [studentAnswerId], references: [id])
+  selectedOption QuestionOption @relation(fields: [selectedOptionId], references: [id])
+
+  @@id([studentAnswerId, selectedOptionId])
+  @@map("StudentMultiSelectAnswers")
+}

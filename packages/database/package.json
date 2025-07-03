@@ -6,7 +6,7 @@
   "scripts": {
     "migrate": "npx prisma migrate dev",
     "generate": "npx prisma generate",
-    "format": "npx prisma migrate dev",
+    "format": "npx prisma format",
     "studio": "npx prisma studio --schema=./schema --browser none",
     "prebuild": "pnpm run generate",
     "predev": "pnpm run generate"

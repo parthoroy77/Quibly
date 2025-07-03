@@ -1,0 +1,67 @@
+model QuizSession {
+  id                   String            @id @default(cuid())
+  quizId               String
+  userId               String
+  sessionCode          String?
+  sessionSlug          String?
+  type                 QuizSessionType
+  status               QuizSessionStatus @default(pending)
+  currentQuestionIndex Int               @default(0)
+
+  // timestamps
+  startTime DateTime
+  endTime   DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  // references
+  quiz             Quiz              @relation(fields: [quizId], references: [id])
+  author           User              @relation(fields: [userId], references: [id])
+  quizParticipants QuizParticipant[]
+  quizScores       QuizScore[]
+  studentAnswers   StudentAnswer[]
+
+  @@map("QuizSessions")
+}
+
+enum QuizSessionType {
+  live
+  scheduled
+}
+
+enum QuizSessionStatus {
+  pending
+  active
+  completed
+  cancelled
+}
+
+model QuizParticipant {
+  id            String   @id @default(cuid())
+  sessionId     String
+  userId        String?
+  anonymousName String?
+  joinedAt      DateTime @default(now())
+
+  session        QuizSession     @relation(fields: [sessionId], references: [id])
+  user           User?           @relation(fields: [userId], references: [id])
+  quizScore      QuizScore?
+  studentAnswers StudentAnswer[]
+
+  @@unique([sessionId, userId])
+  @@unique([sessionId, anonymousName])
+  @@map("QuizParticipants")
+}
+
+model QuizScore {
+  id                    String   @id @default(cuid())
+  participantId         String   @unique
+  sessionId             String
+  totalScore            Int
+  maxPossibleScore      Int
+  completionTimeSeconds Int?
+  finishedAt            DateTime @default(now())
+
+  participant QuizParticipant @relation(fields: [participantId], references: [id])
+  session     QuizSession     @relation(fields: [sessionId], references: [id])
+}
