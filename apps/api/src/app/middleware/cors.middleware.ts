@@ -1,12 +1,13 @@
 import cors, { CorsOptions } from "cors";
 import { Application } from "express";
+import config from "../config";
 
 export interface IOriginConfig {
   origin: string;
 }
 
 // List of allowed origins (add multiple frontend's here)
-export const allowedOrigins: IOriginConfig[] = [];
+export const allowedOrigins: IOriginConfig[] = [{ origin: config.web_domain_url }];
 
 // Configure CORS
 const corsOptions: CorsOptions = {

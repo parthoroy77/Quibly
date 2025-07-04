@@ -11,6 +11,7 @@ export const authConfig = betterAuth({
   },
   baseURL: config.api_domain_url,
   basePath: "/api/v1/auth",
+  trustedOrigins: [config.api_domain_url, config.web_domain_url],
 
   // Database
   database: prismaAdapter(db, {
