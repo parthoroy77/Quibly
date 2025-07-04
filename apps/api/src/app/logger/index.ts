@@ -1,4 +1,6 @@
 import { formatDate } from "date-fns/format";
+import { Application } from "express";
+import morgan from "morgan";
 import { createLogger, format, transports } from "winston";
 const { combine, timestamp, json, colorize } = format;
 
@@ -24,3 +26,23 @@ const logger = createLogger({
 });
 
 export default logger;
+
+const morganFormat = ":method :url :status :response-time ms";
+
+export const applyLogger = (app: Application) => {
+  app.use(
+    morgan(morganFormat, {
+      stream: {
+        write: (message) => {
+          const logObject = {
+            method: message.split(" ")[0],
+            url: message.split(" ")[1],
+            status: message.split(" ")[2],
+            responseTime: message.split(" ")[3],
+          };
+          logger.info(JSON.stringify(logObject));
+        },
+      },
+    })
+  );
+};

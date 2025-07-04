@@ -1,39 +1,32 @@
+import { toNodeHandler } from "better-auth/node";
 import cookieParser from "cookie-parser";
 import express, { Application } from "express";
-import morgan from "morgan";
 import { ApiResponse } from "./app/handlers/ApiResponse";
 import globalErrorHandler from "./app/handlers/globalErrorHandler";
 import notFoundHandler from "./app/handlers/notFounderHandler";
-import logger from "./app/logger";
+import { applyLogger } from "./app/logger";
 import { applyCors } from "./app/middleware/cors.middleware";
+import { authConfig } from "./app/modules/auth/auth.config";
 import router from "./app/routes/index.route";
 
 const app: Application = express();
 
-// parser
-app.use(express.json());
+// logger
+applyLogger(app);
+
+// cookie parser
 app.use(cookieParser());
 
 // cors middleware
 applyCors(app);
-const morganFormat = ":method :url :status :response-time ms";
 
-app.use(
-  morgan(morganFormat, {
-    stream: {
-      write: (message) => {
-        const logObject = {
-          method: message.split(" ")[0],
-          url: message.split(" ")[1],
-          status: message.split(" ")[2],
-          responseTime: message.split(" ")[3],
-        };
-        logger.info(JSON.stringify(logObject));
-      },
-    },
-  })
-);
+// Better Auth Config
+app.all("/api/v1/auth/*splat", toNodeHandler(authConfig));
 
+// body parser
+app.use(express.json());
+
+// Test Routes
 app.get("/ping", (_, res) => {
   ApiResponse(res, { message: "OK", success: true, statusCode: 200, data: {} });
 });
