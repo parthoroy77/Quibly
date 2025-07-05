@@ -1,4 +1,4 @@
-import { User } from "@quibly/prisma/client";
+import { User } from "@quibly/database/client";
 
 declare global {
   namespace Express {

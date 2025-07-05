@@ -18,6 +18,7 @@
   "license": "ISC",
   "dependencies": {
     "@quibly/database": "workspace:*",
+    "@quibly/utils": "workspace:*",
     "@types/multer": "^2.0.0",
     "bcryptjs": "^3.0.2",
     "colors": "^1.4.0",
