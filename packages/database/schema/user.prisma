@@ -78,3 +78,16 @@ model Session {
   @@index([token])
   @@map("Sessions")
 }
+
+model Verification {
+  id         String   @id @default(cuid())
+  identifier String
+  value      String
+  expiresAt  DateTime
+
+  // timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("Verifications")
+}

@@ -16,6 +16,8 @@ import { authClient } from "@/lib/auth-client";
 import { useForm, zodResolver } from "@quibly/utils/hook-form";
 import { LoginFormData, loginSchema } from "@quibly/utils/validations";
 
+const callBackUrl = process.env.NEXT_PUBLIC_DOMAIN_URL + "/";
+const errorCallBackUrl = process.env.NEXT_PUBLIC_DOMAIN_URL + "/login";
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -56,7 +58,8 @@ export default function LoginPage() {
     try {
       await authClient.signIn.social({
         provider: "google",
-        callbackURL: "/dashboard",
+        callbackURL: callBackUrl,
+        errorCallbackURL: errorCallBackUrl,
       });
     } catch (err) {
       setError("Failed to sign in with Google");
