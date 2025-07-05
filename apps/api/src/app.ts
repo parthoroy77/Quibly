@@ -1,4 +1,3 @@
-import { toNodeHandler } from "better-auth/node";
 import cookieParser from "cookie-parser";
 import express, { Application } from "express";
 import { ApiResponse } from "./app/handlers/ApiResponse";
@@ -6,7 +5,6 @@ import globalErrorHandler from "./app/handlers/globalErrorHandler";
 import notFoundHandler from "./app/handlers/notFounderHandler";
 import { applyLogger } from "./app/logger";
 import { applyCors } from "./app/middleware/cors.middleware";
-import { authConfig } from "./app/modules/auth/auth.config";
 import router from "./app/routes/index.route";
 
 const app: Application = express();
@@ -14,17 +12,12 @@ const app: Application = express();
 // logger
 applyLogger(app);
 
-// cookie parser
+// parser
+app.use(express.json());
 app.use(cookieParser());
 
 // cors middleware
 applyCors(app);
-
-// Better Auth Config
-app.all("/api/v1/auth/*splat", toNodeHandler(authConfig));
-
-// body parser
-app.use(express.json());
 
 // Test Routes
 app.get("/ping", (_, res) => {

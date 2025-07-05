@@ -20,7 +20,6 @@
     "@quibly/database": "workspace:*",
     "@types/multer": "^2.0.0",
     "bcryptjs": "^3.0.2",
-    "better-auth": "^1.2.12",
     "colors": "^1.4.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
