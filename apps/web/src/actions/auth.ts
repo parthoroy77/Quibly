@@ -1,9 +1,15 @@
 "use server";
 
 import { signIn } from "@/lib/auth";
-import { LoginFormData } from "@quibly/utils/validations";
+import { fetcher } from "@/lib/fetcher";
+import { LoginFormData, RegistrationFormData } from "@quibly/utils/validations";
 import { AuthError } from "next-auth";
 import { redirect } from "next/navigation";
+
+export const userRegistration = async (data: RegistrationFormData) => {
+  const response = await fetcher("/auth/registration", { method: "POST", cache: "no-store", body: data });
+  return response;
+};
 
 export const userLogin = async (data: LoginFormData) => {
   try {

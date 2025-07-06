@@ -2,19 +2,20 @@
 
 import { ArrowUpRight, Eye, EyeOff, Lock, Mail, User } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 
+import { userRegistration } from "@/actions/auth";
 import { Button } from "@quibly/ui/components/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@quibly/ui/components/form";
 import { Input } from "@quibly/ui/components/input";
+import { toast } from "@quibly/ui/components/sonner";
 import { useForm, zodResolver } from "@quibly/utils/hook-form";
 import { RegistrationFormData, registrationSchema } from "@quibly/utils/validations";
 import AuthFormWrapper from "../components/auth-form-wrapper";
 
 const SignupPage = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const [isLoading] = useState(false);
-  const [error] = useState("");
+  const [isLoading, startTransition] = useTransition();
 
   const form = useForm<RegistrationFormData>({
     resolver: zodResolver(registrationSchema),
@@ -26,7 +27,18 @@ const SignupPage = () => {
   });
 
   const onSubmit = async (data: RegistrationFormData) => {
-    console.log(data);
+    const toastId = toast.loading("Processing your request", { duration: 2000 });
+    startTransition(async () => {
+      const response = await userRegistration(data);
+      if (response.success) {
+        toast.success(response.message, { id: toastId });
+        // TODO: Redirect to verify account page
+        // router.push(`/verification-request?email=${data.email}`);
+        // form.reset({ email: "", fullName: "", password: "" });
+      } else {
+        toast.error(response.message, { id: toastId });
+      }
+    });
   };
 
   return (
