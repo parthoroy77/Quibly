@@ -1,3 +1,5 @@
+import { RefreshToken, Session } from "@quibly/database/client";
+
 export interface ExtendedFile extends File {
   fieldname: string;
   originalname: string;
@@ -19,4 +21,9 @@ export type TPaginationState = {
   limit: number;
   total: number;
   totalPages: number;
+};
+
+export type TLoginResponse = {
+  session: Session;
+  refreshToken: RefreshToken;
 };
