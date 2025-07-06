@@ -23,7 +23,14 @@ export const authConfig = NextAuth({
           cache: "no-store",
         });
 
-        if (!result.success) throw new Error(result.message);
+        if (!result.success) {
+          if (result.statusCode === 406) {
+            const error = new Error(result.message);
+            error.name = "EMAIL_NOT_VERIFIED"; // e.g., "EMAIL_NOT_VERIFIED"
+            throw error;
+          }
+          throw Error(result.message);
+        }
 
         if (!result.success || !result.data) return null;
 

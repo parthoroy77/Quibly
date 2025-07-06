@@ -1,20 +1,22 @@
 "use client";
 
-import { ArrowUpRight, Eye, EyeOff, Lock, Mail } from "lucide-react";
-import Link from "next/link";
-import { useState } from "react";
-
+import { userLogin } from "@/actions/auth";
 import { Button } from "@quibly/ui/components/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@quibly/ui/components/form";
 import { Input } from "@quibly/ui/components/input";
+import { toast } from "@quibly/ui/components/sonner";
 import { useForm, zodResolver } from "@quibly/utils/hook-form";
 import { LoginFormData, loginSchema } from "@quibly/utils/validations";
+import { ArrowUpRight, Eye, EyeOff, Lock, Mail } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState, useTransition } from "react";
 import AuthFormWrapper from "../components/auth-form-wrapper";
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const [isLoading] = useState(false);
-  const [error] = useState("");
+  const [isLoading, startTransition] = useTransition();
+  const router = useRouter();
 
   const form = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
@@ -25,11 +27,17 @@ const LoginPage = () => {
   });
 
   const onSubmit = async (data: LoginFormData) => {
-    console.log(data);
-  };
-
-  const handleGoogleSignIn = async () => {
-    // handle google signIn
+    const toastId = toast.loading("Processing your request", { duration: 2000 });
+    startTransition(async () => {
+      const response = await userLogin(data);
+      if (response.success) {
+        toast.success(response.message, { id: toastId });
+        router.push("/");
+        form.reset();
+      } else {
+        toast.error(response.message, { id: toastId });
+      }
+    });
   };
 
   return (
