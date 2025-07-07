@@ -8,7 +8,7 @@ export const ROOT_ROUTE = "/";
  * The default redirect path after logging in.
  * @type {string}
  */
-export const DEFAULT_LOGIN_REDIRECT = "/app"; // will change it if needed
+export const DEFAULT_LOGIN_REDIRECT = "/dashboard"; // will change it if needed
 
 /**
  * An array of routes those are accessible to the public
