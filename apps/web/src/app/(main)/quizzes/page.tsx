@@ -1,4 +1,5 @@
 import QuizCard from "@/components/ui/quiz-card";
+import ViewToggle from "@/components/ui/view-toggle";
 import { Button } from "@quibly/ui/components/button";
 import { FileSliders, Sparkle } from "lucide-react";
 const QuizzesPage = () => {
@@ -14,11 +15,12 @@ const QuizzesPage = () => {
         </div>
       </div>
       <div className=" space-y-4">
-        <div className="flex justify-end">
+        <div className="flex items-center justify-between">
           <Button variant={"secondary"}>
             <FileSliders />
             <span>Filter</span>
           </Button>
+          <ViewToggle />
         </div>
         <div className="grid grid-cols-4 gap-5">
           {Array.from({ length: 10 }).map((_x, i) => (

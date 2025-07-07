@@ -19,7 +19,7 @@ import {
 
 const QuizCard = () => {
   return (
-    <div className="rounded-xl  relative border shadow-sm p-2 space-y-2">
+    <div className="rounded-xl bg-sidebar relative border shadow-sm p-2 space-y-2">
       <div className="h-24 bg-red-200 rounded-lg" />
       <h2 className="font-semibold font-instrumental-sans tracking-wide">Software Development & AI Enhancement</h2>
       <p className="line-clamp-2 text-xs font-medium text-muted-foreground">
@@ -54,7 +54,7 @@ const QuizCard = () => {
               <Button
                 size={"icon"}
                 variant={"outline"}
-                className="text-xs rounded-full p-1 size-fit  inline-flex gap-1 items-center"
+                className="text-xs cursor-pointer rounded-full p-1 size-fit  inline-flex gap-1 items-center"
               >
                 <Ellipsis />
               </Button>
