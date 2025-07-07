@@ -44,7 +44,7 @@ const SignupPage = () => {
   return (
     <AuthFormWrapper>
       <div>
-        <h1 className="text-3xl font-medium">Create an Account</h1>
+        <h1 className="text-3xl  font-instrumental-serif font-bold">Create an Account</h1>
         <p className="text-muted-foreground text-sm">Enter your details to get started</p>
       </div>
       <Form {...form}>

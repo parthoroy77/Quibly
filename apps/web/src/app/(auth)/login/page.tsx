@@ -43,7 +43,7 @@ const LoginPage = () => {
   return (
     <AuthFormWrapper>
       <div>
-        <h1 className="text-3xl font-medium">Login</h1>
+        <h1 className="text-3xl  font-instrumental-serif font-bold">Login</h1>
         <p className="text-muted-foreground text-sm">Hi, Welcome Back</p>
       </div>
       <Form {...form}>

@@ -35,4 +35,4 @@ export const API_AUTH_PREFIX = "/api/auth";
  * These routes will redirect logged in users to default routes
  * @types {string[]}
  */
-export const AUTH_ROUTES = ["/login", "/register", "/verify", "/verification-request"];
+export const AUTH_ROUTES = ["/login", "/signup", "/verify", "/verification-request"];

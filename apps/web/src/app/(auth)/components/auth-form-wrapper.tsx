@@ -1,6 +1,7 @@
+import Logo from "@/components/ui/logo";
 import ThemeToggle from "@/components/ui/theme-toggle";
 import { Separator } from "@quibly/ui/components/separator";
-import { Box, ChevronLeft } from "lucide-react";
+import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
 import { ReactNode } from "react";
 import SocialLogin from "./social-login";
@@ -25,19 +26,15 @@ const AuthFormWrapper = ({ children }: { children: ReactNode }) => {
         <ThemeToggle />
       </div>
 
+      <Logo />
       <div className="p-4 md:max-w-md w-full space-y-4">
-        <div className="flex text-primary gap-2 dark:text-white justify-center items-center">
-          <Box />
-          <span className="text-xl font-semibold ">Quibly</span>
-        </div>
-
         {children}
         <div className="relative">
           <div className="absolute inset-0 flex items-center">
             <Separator className="w-full" />
           </div>
-          <div className="relative flex justify-center text-xs ">
-            <span className="px-2 text-muted-foreground">Or continue with</span>
+          <div className="relative flex justify-center text-xs  ">
+            <span className="px-2 text-muted-foreground backdrop-blur-2xl">Or continue with</span>
           </div>
         </div>
         <SocialLogin />
