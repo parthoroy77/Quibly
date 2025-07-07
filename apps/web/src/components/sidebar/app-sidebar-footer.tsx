@@ -11,7 +11,7 @@ import {
 } from "@quibly/ui/components/dropdown-menu";
 import { SidebarFooter, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@quibly/ui/components/sidebar";
 import { useIsMobile } from "@quibly/ui/hooks/use-mobile";
-import { BadgeCheck, Bell, ChevronsUpDown, CreditCard, LogOut, Sparkles } from "lucide-react";
+import { ChevronsUpDown, LogOut, Sparkles } from "lucide-react";
 
 const AppSidebarFooter = () => {
   const isMobile = useIsMobile();
@@ -64,21 +64,6 @@ const AppSidebarFooter = () => {
                 <DropdownMenuItem>
                   <Sparkles />
                   Upgrade to Pro
-                </DropdownMenuItem>
-              </DropdownMenuGroup>
-              <DropdownMenuSeparator />
-              <DropdownMenuGroup>
-                <DropdownMenuItem>
-                  <BadgeCheck />
-                  Account
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <CreditCard />
-                  Billing
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Bell />
-                  Notifications
                 </DropdownMenuItem>
               </DropdownMenuGroup>
               <DropdownMenuSeparator />

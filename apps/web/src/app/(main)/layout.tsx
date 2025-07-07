@@ -7,7 +7,7 @@ const MainLayout = ({ children }: { children: ReactNode }) => {
   return (
     <SidebarProvider>
       <AppSidebar />
-      <main className="flex-1 bg-sidebar p-1 ">
+      <main className="flex-1 bg-sidebar p-2 ">
         <section className="h-full overflow-hidden bg-background w-full rounded-xl border">
           <AppSidebarInset />
           {/* <header className=" flex justify-between items-center ">
