@@ -25,7 +25,7 @@ const AppSidebarInset = () => {
     const label = decodeURIComponent(segment).replace(/-/g, " ");
 
     return (
-      <BreadcrumbItem key={href} className="capitalize">
+      <BreadcrumbItem key={href} className="capitalize text-xs">
         {isLast ? (
           <BreadcrumbPage>{label}</BreadcrumbPage>
         ) : (
@@ -48,7 +48,7 @@ const AppSidebarInset = () => {
           <Separator orientation="vertical" className="mr-2 data-[orientation=vertical]:h-4" />
           <Breadcrumb>
             <BreadcrumbList>
-              <BreadcrumbItem>
+              <BreadcrumbItem className="text-xs">
                 <BreadcrumbLink asChild>
                   <Link href="/">Home</Link>
                 </BreadcrumbLink>

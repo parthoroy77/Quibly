@@ -9,7 +9,8 @@ import {
   SidebarMenuItem,
 } from "@quibly/ui/components/sidebar";
 import { cn } from "@quibly/ui/lib/utils";
-import { BadgeCheck, CreditCard, File, Inbox, Send } from "lucide-react";
+import { BadgeCheck, CreditCard, FileStack, Inbox, Send } from "lucide-react";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 export const navItems = [
@@ -21,8 +22,8 @@ export const navItems = [
   },
   {
     title: "Quizzes",
-    url: "#",
-    icon: File,
+    url: "/quizzes",
+    icon: FileStack,
     isActive: false,
   },
   {
@@ -55,19 +56,21 @@ const AppSidebarMenu = () => {
           <SidebarMenu>
             {navItems.map((item) => (
               <SidebarMenuItem key={item.title}>
-                <SidebarMenuButton
-                  tooltip={{
-                    children: item.title,
-                    hidden: true,
-                  }}
-                  className={cn(
-                    "px-2.5 md:px-2 cursor-pointer",
-                    pathname === item.url && "bg-sidebar-accent [&_svg]:text-primary dark:text-white"
-                  )}
-                >
-                  <item.icon />
-                  <span>{item.title}</span>
-                </SidebarMenuButton>
+                <Link href={item.url}>
+                  <SidebarMenuButton
+                    tooltip={{
+                      children: item.title,
+                      hidden: true,
+                    }}
+                    className={cn(
+                      "px-2.5 md:px-2 cursor-pointer",
+                      pathname === item.url && "bg-sidebar-accent [&_svg]:text-primary dark:text-white"
+                    )}
+                  >
+                    <item.icon />
+                    <span>{item.title}</span>
+                  </SidebarMenuButton>
+                </Link>
               </SidebarMenuItem>
             ))}
           </SidebarMenu>
