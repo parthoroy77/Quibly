@@ -1,4 +1,5 @@
 "use client";
+import { createQuiz } from "@/actions/quiz";
 import { Button } from "@quibly/ui/components/button";
 import {
   Dialog,
@@ -10,14 +11,18 @@ import {
 } from "@quibly/ui/components/dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@quibly/ui/components/form";
 import { Input } from "@quibly/ui/components/input";
+import { toast } from "@quibly/ui/components/sonner";
 import { Textarea } from "@quibly/ui/components/textarea";
 import { useForm, zodResolver } from "@quibly/utils/hook-form";
 import { CreateQuizFormData, CreateQuizSchema } from "@quibly/utils/validations";
 import { Sparkle } from "lucide-react";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useState, useTransition } from "react";
 
 const CreateQuizModalForm = () => {
   const [open, setOpen] = useState(false);
+  const [isPending, startTransition] = useTransition();
+  const router = useRouter();
 
   const form = useForm<CreateQuizFormData>({
     resolver: zodResolver(CreateQuizSchema),
@@ -30,10 +35,19 @@ const CreateQuizModalForm = () => {
   const watchDescription = form.watch("description");
   const maxDescriptionLength = 500;
 
-  const onSubmit = (data: CreateQuizFormData) => {
-    // Handle form submission here
-    setOpen(false);
-    form.reset();
+  const onSubmit = async (data: CreateQuizFormData) => {
+    const toastId = toast.loading("Processing your request", { duration: 2000 });
+    startTransition(async () => {
+      const response = await createQuiz(data);
+      if (response.success && response.data) {
+        toast.success(response.message || "Quiz created successfully", { id: toastId });
+        setOpen(false);
+        router.push("/manage-quiz/" + response.data.id);
+        form.reset();
+      } else {
+        toast.error(response.message || "Unable to process request", { id: toastId });
+      }
+    });
   };
 
   return (
@@ -44,7 +58,7 @@ const CreateQuizModalForm = () => {
           <span>Create Quiz</span>
         </Button>
       </DialogTrigger>
-      <DialogContent className="!max-w-2xl space-y-3">
+      <DialogContent showCloseButton className="!max-w-2xl space-y-3">
         <DialogHeader>
           <DialogTitle className="font-instrumental-serif text-3xl font-semibold text-center">
             Create New Quiz
@@ -125,7 +139,7 @@ const CreateQuizModalForm = () => {
               <Button variant="destructive" type="button" onClick={() => setOpen(false)}>
                 Cancel
               </Button>
-              <Button type="submit" disabled={form.formState.isSubmitting}>
+              <Button type="submit" disabled={form.formState.isSubmitting || isPending}>
                 {form.formState.isSubmitting ? "Creating..." : "Create Quiz"}
               </Button>
             </div>

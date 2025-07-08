@@ -1,7 +1,7 @@
+import { revalidateOnServer } from "@/actions/auth";
 import { getErrorMessage } from "@quibly/utils/functions";
 import { IApiResponse } from "@quibly/utils/types";
 import { Session } from "next-auth";
-import { revalidateTag } from "next/cache";
 
 type HttpMethod = "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
 
@@ -61,7 +61,7 @@ export async function fetcher<TResponse, TBody = unknown>(
     const result = await response.json();
 
     if (!response.ok && response.status === 401) {
-      revalidateTag("auth");
+      revalidateOnServer("auth");
     }
 
     if (response.ok) {

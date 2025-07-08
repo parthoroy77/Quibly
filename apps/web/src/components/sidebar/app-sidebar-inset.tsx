@@ -1,44 +1,29 @@
 "use client";
-
 import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
-  BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@quibly/ui/components/breadcrumb";
 import { Separator } from "@quibly/ui/components/separator";
 import { SidebarInset, SidebarTrigger } from "@quibly/ui/components/sidebar";
-import Link from "next/link";
 import { usePathname } from "next/navigation";
+import React from "react";
 import ThemeToggle from "../ui/theme-toggle";
 
 const AppSidebarInset = () => {
   const pathname = usePathname();
-
-  const segments = pathname.split("/").filter(Boolean);
-
-  const breadcrumbItems = segments.map((segment, index) => {
-    const href = "/" + segments.slice(0, index + 1).join("/");
-    const isLast = index === segments.length - 1;
-    const label = decodeURIComponent(segment).replace(/-/g, " ");
-
-    return (
-      <BreadcrumbItem key={href} className="capitalize text-xs">
-        {isLast ? (
-          <BreadcrumbPage>{label}</BreadcrumbPage>
-        ) : (
-          <>
-            <BreadcrumbLink asChild>
-              <Link href={href}>{label}</Link>
-            </BreadcrumbLink>
-            <BreadcrumbSeparator />
-          </>
-        )}
-      </BreadcrumbItem>
-    );
-  });
+  const paths = pathname.split("/")?.filter((x) => x);
+  const formattedPaths = [
+    ...paths.map((name, index) => {
+      const path = `/${paths.slice(0, index + 1).join("/")}`;
+      return {
+        label: name.replace(/[_-]+/g, " ").replace(/([a-z])([A-Z])/g, "$1 $2"),
+        path,
+      };
+    }),
+  ];
 
   return (
     <SidebarInset>
@@ -48,13 +33,23 @@ const AppSidebarInset = () => {
           <Separator orientation="vertical" className="mr-2 data-[orientation=vertical]:h-4" />
           <Breadcrumb>
             <BreadcrumbList>
-              <BreadcrumbItem className="text-xs">
-                <BreadcrumbLink asChild>
-                  <Link href="/">Home</Link>
+              <BreadcrumbItem>
+                <BreadcrumbLink href="/dashboard" className="text-xs">
+                  Home
                 </BreadcrumbLink>
               </BreadcrumbItem>
-              {segments.length > 0 && <BreadcrumbSeparator />}
-              {breadcrumbItems}
+              {formattedPaths.length > 0 && <BreadcrumbSeparator />}
+              {formattedPaths.length > 0 &&
+                formattedPaths.map(({ label, path }, i) => (
+                  <React.Fragment key={i}>
+                    <BreadcrumbItem className="text-xs">
+                      <BreadcrumbLink href={path} className="capitalize">
+                        {label}
+                      </BreadcrumbLink>
+                    </BreadcrumbItem>
+                    {i + 1 < formattedPaths.length && <BreadcrumbSeparator />}
+                  </React.Fragment>
+                ))}
             </BreadcrumbList>
           </Breadcrumb>
         </div>

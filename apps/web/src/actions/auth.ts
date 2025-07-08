@@ -4,6 +4,7 @@ import { signIn } from "@/lib/auth";
 import { fetcher } from "@/lib/fetcher";
 import { LoginFormData, RegistrationFormData } from "@quibly/utils/validations";
 import { AuthError } from "next-auth";
+import { revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 
 export const userRegistration = async (data: RegistrationFormData) => {
@@ -24,7 +25,6 @@ export const userLogin = async (data: LoginFormData) => {
       message: "User logged in successfully!",
     };
   } catch (error) {
-    console.log(error);
     if (error instanceof AuthError) {
       if (error["cause"]?.err?.name === "EMAIL_NOT_VERIFIED") redirect("/verification-request");
       return {
@@ -37,4 +37,8 @@ export const userLogin = async (data: LoginFormData) => {
       message: "Failed to login",
     };
   }
+};
+
+export const revalidateOnServer = async (tag: string) => {
+  revalidateTag(tag);
 };
