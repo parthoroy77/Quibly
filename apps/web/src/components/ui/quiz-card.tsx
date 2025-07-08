@@ -9,6 +9,7 @@ import {
 import {
   ChartNoAxesGantt,
   CircleFadingPlus,
+  Copy,
   Ellipsis,
   FileQuestion,
   Layers2,
@@ -39,7 +40,7 @@ const QuizCard = () => {
           <span>1h</span>
         </div>
       </div>
-      <Badge className="text-xs inline-flex gap-1 absolute top-2 right-2 p-1 rounded-lg border px-2 items-center">
+      <Badge className="text-xs inline-flex bg-secondary text-primary dark:text-white border-primary/40 gap-1 absolute top-2 right-2 p-1 rounded-lg border px-2 items-center">
         <Layers2 size={14} />
         <span>{"Scheduled"}</span>
       </Badge>
@@ -60,6 +61,10 @@ const QuizCard = () => {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="flex flex-col items-start gap-1 *:w-full">
+              <DropdownMenuItem>
+                <Copy />
+                <span>Duplicate</span>
+              </DropdownMenuItem>
               <DropdownMenuItem>
                 <ChartNoAxesGantt />
                 <span>View </span>

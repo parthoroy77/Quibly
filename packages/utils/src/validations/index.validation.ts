@@ -3,3 +3,4 @@ export * from "zod";
 
 // zod schemas
 export * from "./auth.validation";
+export * from "./quiz.validation";
