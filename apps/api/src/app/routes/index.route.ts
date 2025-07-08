@@ -1,5 +1,6 @@
 import { Router } from "express";
 import AuthRoutes from "../modules/auth/auth.routes";
+import QuizRoutes from "../modules/quiz/quiz.routes";
 
 const router = Router();
 
@@ -8,7 +9,10 @@ type TRouteModule = {
   route: Router;
 };
 
-const routerModules: TRouteModule[] = [{ path: "/auth", route: AuthRoutes }];
+const routerModules: TRouteModule[] = [
+  { path: "/auth", route: AuthRoutes },
+  { path: "/quizzes", route: QuizRoutes },
+];
 
 routerModules.forEach((routerModule) => {
   router.use(routerModule.path, routerModule.route);
