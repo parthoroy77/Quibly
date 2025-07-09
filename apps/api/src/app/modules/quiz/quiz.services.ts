@@ -33,4 +33,24 @@ const getByUserId = async (userId: string) => {
   });
 };
 
-export const QuizServices = { create, getAll, getByUserId };
+const getWithQuestions = async (id: string) => {
+  return await db.quiz.findUnique({
+    where: {
+      id,
+    },
+    include: {
+      questions: {
+        include: {
+          options: {
+            include: {
+              correctAnswer: true,
+              correctMultiSelectOptions: true,
+            },
+          },
+        },
+      },
+    },
+  });
+};
+
+export const QuizServices = { create, getAll, getByUserId, getWithQuestions };

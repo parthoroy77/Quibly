@@ -1,4 +1,5 @@
 import { StatusCodes } from "http-status-codes";
+import { ApiError } from "../../handlers/ApiError";
 import { ApiResponse } from "../../handlers/ApiResponse";
 import asyncHandler from "../../handlers/asyncHandler";
 import { QuizServices } from "./quiz.services";
@@ -34,8 +35,26 @@ const getAllQuizByUserId = asyncHandler(async (req, res) => {
   });
 });
 
+const getQuizWithQuestion = asyncHandler(async (req, res) => {
+  const { quizId } = req.params;
+
+  if (!quizId) {
+    throw new ApiError(StatusCodes.NOT_FOUND, "Quiz identifier not found!");
+  }
+
+  const result = await QuizServices.getWithQuestions(quizId);
+
+  ApiResponse(res, {
+    data: result,
+    message: "Quiz and questions retrieved successfully",
+    success: true,
+    statusCode: StatusCodes.OK,
+  });
+});
+
 export const QuizControllers = {
   createQuiz,
   getAllQuiz,
   getAllQuizByUserId,
+  getQuizWithQuestion,
 };
