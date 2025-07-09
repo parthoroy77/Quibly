@@ -184,3 +184,8 @@
     @apply text-xs;
   }
 }
+
+.scrollbar-hidden::-webkit-scrollbar {
+  visibility: hidden;
+  width: 0;
+}
