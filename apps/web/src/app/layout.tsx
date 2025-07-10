@@ -2,6 +2,7 @@ import { Geist, Geist_Mono, Instrument_Sans, Instrument_Serif } from "next/font/
 
 import { Providers } from "@/components/providers";
 import "@quibly/ui/globals.css";
+import { cn } from "@quibly/ui/lib/utils";
 
 const fontSans = Geist({
   subsets: ["latin"],
@@ -35,7 +36,15 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${fontSans.variable} ${fontMono.variable} ${fontInstrumentalSerif.variable} ${fontInstrumentalSans.variable} font-sans antialiased`}
+        suppressHydrationWarning
+        className={cn(
+          fontSans.variable,
+          fontMono.variable,
+          fontInstrumentalSerif.variable,
+          fontInstrumentalSans.variable,
+          "font-sans",
+          "antialiased"
+        )}
       >
         <Providers>{children}</Providers>
       </body>

@@ -1,3 +1,4 @@
+"use client";
 import { Button } from "@quibly/ui/components/button";
 import { Input } from "@quibly/ui/components/input";
 import { Label } from "@quibly/ui/components/label";
@@ -73,10 +74,11 @@ const ManageQuizView = ({ quiz }: { quiz: QuizWithQsn }) => {
                   <div className="space-y-2">
                     {Array.from({ length: 4 }).map((_x, i) => (
                       <div key={i} className="h-9 flex gap-2 items-center">
+                        <input type="radio" className="size-5 " />
+                        <Input className="h-full" placeholder={"Option " + (i + 1)} />
                         <Button size={"icon"} variant={"ghost"} className="size-fit border bg-sidebar h-full px-1">
                           <GripVertical />
                         </Button>
-                        <Input className="h-full" placeholder={"Option " + (i + 1)} />
                         <Button size={"icon"} variant={"ghost"}>
                           <Trash2 color="red" />
                         </Button>
@@ -125,14 +127,14 @@ const ManageQuizView = ({ quiz }: { quiz: QuizWithQsn }) => {
           {Array.from({ length: 1 }).map((_x, i) => (
             <div className="p-4 rounded-xl border bg-background space-y-3 cursor-pointer" key={i}>
               <div className="flex items-center gap-2 ">
-                <span className="font-instrumental-sans bg-secondary font-bold size-7 text-sm flex items-center justify-center rounded-full border shrink-0">
+                <span className="font-instrumental-sans bg-secondary font-bold size-6 text-sm flex items-center justify-center rounded-full border shrink-0">
                   {i + 1}
                 </span>
                 <h4 className="truncate font-medium">What is software development?</h4>
               </div>
               <div className="flex items-center text-xs font-medium justify-between flex-wrap">
                 <div>
-                  <span className="p-2 py-0.5 bg-secondary rounded-md">Multiple Choice</span>
+                  <span className="p-2 py-0.5 bg-secondary rounded-md border">Multiple Choice</span>
                 </div>
                 <div className="text-xs inline-flex gap-1 items-center">
                   <Sheet size={14} />
