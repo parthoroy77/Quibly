@@ -41,10 +41,31 @@ interface CardProps {
 }
 const QuestionCard: FC<CardProps> = ({ questionIndex, form, removeQuestion }) => {
   const [media, setMedia] = useState(false);
-  const {} = useFieldArray({
+  const {
+    append: appendOption,
+    fields: options,
+    remove: removeOption,
+  } = useFieldArray({
     control: form.control,
     name: `questions.${questionIndex}.options`,
   });
+  const questionType = form.watch(`questions.${questionIndex}.type`);
+  const addNewOption = () => {
+    appendOption({
+      index: options.length,
+      isCorrect: false,
+      text: "",
+    });
+  };
+
+  const handleCorrectAnswerChange = (optionIndex: number) => {
+    if (questionType === QuestionType.multiple_choice_single) {
+      // For single choice, uncheck all others
+      options.forEach((_, index) => {
+        form.setValue(`questions.${questionIndex}.options.${index}.isCorrect`, index === optionIndex);
+      });
+    }
+  };
   return (
     <div className="border *:p-3 divide-y rounded-xl w-full h-fit [&_input]:bg-sidebar [&_textarea]:bg-sidebar">
       <div className="flex items-center justify-between ">
@@ -117,7 +138,7 @@ const QuestionCard: FC<CardProps> = ({ questionIndex, form, removeQuestion }) =>
             <FormItem>
               <FormLabel>Question</FormLabel>
               <FormControl>
-                <Textarea {...field} maxLength={100} placeholder="What is 2 + 2?" className="resize-none" />
+                <Textarea {...field} maxLength={100} placeholder="Write your question here!" className="resize-none" />
               </FormControl>
             </FormItem>
           )}
@@ -135,27 +156,90 @@ const QuestionCard: FC<CardProps> = ({ questionIndex, form, removeQuestion }) =>
             </FormItem>
           )}
         />
-        <div className="space-y-2">
-          <Label>Choices</Label>
+        {questionType !== "short_answer" && (
           <div className="space-y-2">
-            {Array.from({ length: 4 }).map((_x, i) => (
-              <div key={i} className="h-9 flex gap-2 items-center">
-                <input type="radio" className="size-5 " />
-                <Input className="h-full" placeholder={"Option " + (i + 1)} />
-                <Button size={"icon"} variant={"ghost"} className="size-fit border bg-sidebar h-full px-1">
-                  <GripVertical />
-                </Button>
-                <Button size={"icon"} variant={"ghost"}>
-                  <Trash2 color="red" />
-                </Button>
-              </div>
-            ))}
-            <Button className="ml-8">
-              <Plus />
-              Add Answer
-            </Button>
+            <Label>Choices</Label>
+            <div className="space-y-2">
+              {options.map((option, optionIndex) => (
+                <div key={option.id} className="h-9 flex gap-2 items-center">
+                  {/* Correct Answer Selection */}
+                  <FormField
+                    control={form.control}
+                    name={`questions.${questionIndex}.options.${optionIndex}.isCorrect`}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <input
+                            type={questionType === QuestionType.multiple_choice_single ? "radio" : "checkbox"}
+                            name={
+                              questionType === QuestionType.multiple_choice_single
+                                ? `question-${questionIndex}-correct`
+                                : undefined
+                            }
+                            className="size-4 mr-1 ml-1"
+                            checked={field.value}
+                            onChange={(e) => {
+                              if (questionType === QuestionType.multiple_choice_single) {
+                                handleCorrectAnswerChange(optionIndex);
+                              } else {
+                                field.onChange(e.target.checked);
+                              }
+                            }}
+                          />
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+
+                  {/* Option Text */}
+                  <FormField
+                    control={form.control}
+                    name={`questions.${questionIndex}.options.${optionIndex}.text`}
+                    render={({ field }) => (
+                      <FormItem className="flex-1 h-full">
+                        <FormControl>
+                          <Input {...field} className="h-full" placeholder={`Option ${optionIndex + 1}`} />
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+
+                  <Button type="button" size="icon" variant="ghost" className="size-fit border bg-sidebar h-full px-1">
+                    <GripVertical />
+                  </Button>
+
+                  <Button
+                    type="button"
+                    size="icon"
+                    variant="ghost"
+                    onClick={() => removeOption(optionIndex)}
+                    disabled={options.length <= 2}
+                  >
+                    <Trash2 color="red" />
+                  </Button>
+                </div>
+              ))}
+
+              <Button type="button" onClick={addNewOption} className="ml-8">
+                <Plus />
+                Add Answer
+              </Button>
+            </div>
           </div>
-        </div>
+        )}
+        {questionType === "short_answer" && (
+          <FormField
+            control={form.control}
+            name={`questions.${questionIndex}.options.0.correctAnswer`}
+            render={({ field }) => (
+              <FormItem className="flex-1 h-full">
+                <FormControl>
+                  <Input {...field} placeholder={"Write correct answer"} />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+        )}
       </div>
       <div className="flex items-center gap-3">
         <FormField

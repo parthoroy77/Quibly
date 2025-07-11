@@ -15,7 +15,6 @@ const ManageQuizView = ({ quiz }: { quiz: QuizWithQsn }) => {
     },
   });
 
-  console.log(form.watch());
   return (
     <div className="divide-y h-full">
       <Header title={quiz.title} />
