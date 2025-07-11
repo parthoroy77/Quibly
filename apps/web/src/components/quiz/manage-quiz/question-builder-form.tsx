@@ -1,3 +1,4 @@
+import { createMultipleChoiceOptions, createShortAnswerOption, TRUE_FALSE_OPTIONS } from "@/utilities/quiz";
 import { Button } from "@quibly/ui/components/button";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "@quibly/ui/components/form";
 import { Input } from "@quibly/ui/components/input";
@@ -50,6 +51,7 @@ const QuestionCard: FC<CardProps> = ({ questionIndex, form, removeQuestion }) =>
     name: `questions.${questionIndex}.options`,
   });
   const questionType = form.watch(`questions.${questionIndex}.type`);
+
   const addNewOption = () => {
     appendOption({
       index: options.length,
@@ -66,6 +68,23 @@ const QuestionCard: FC<CardProps> = ({ questionIndex, form, removeQuestion }) =>
       });
     }
   };
+
+  const handleTypeChange = (type: QuestionType) => {
+    removeOption();
+    switch (type) {
+      case "multiple_choice_multi":
+        appendOption(createMultipleChoiceOptions());
+        break;
+      case "multiple_choice_single":
+        appendOption(createMultipleChoiceOptions());
+        break;
+      case "short_answer":
+        appendOption(createShortAnswerOption());
+        break;
+      case "true_false":
+        appendOption(TRUE_FALSE_OPTIONS);
+    }
+  };
   return (
     <div className="border *:p-3 divide-y rounded-xl w-full h-fit [&_input]:bg-sidebar [&_textarea]:bg-sidebar">
       <div className="flex items-center justify-between ">
@@ -80,7 +99,13 @@ const QuestionCard: FC<CardProps> = ({ questionIndex, form, removeQuestion }) =>
               name={`questions.${questionIndex}.type`}
               render={({ field }) => (
                 <FormItem>
-                  <Select onValueChange={field.onChange} value={field.value}>
+                  <Select
+                    onValueChange={(value) => {
+                      field.onChange(value);
+                      handleTypeChange(value as QuestionType);
+                    }}
+                    value={field.value}
+                  >
                     <FormControl>
                       <SelectTrigger className="w-56 capitalize bg-sidebar">
                         <SelectValue placeholder="Question Type" />
