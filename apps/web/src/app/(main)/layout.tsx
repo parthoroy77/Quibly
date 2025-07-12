@@ -5,13 +5,11 @@ import { ReactNode } from "react";
 
 const MainLayout = ({ children }: { children: ReactNode }) => {
   return (
-    <SidebarProvider>
+    <SidebarProvider className="bg-sidebar p-2">
       <AppSidebar />
-      <main className="flex-1 bg-sidebar p-2">
-        <section className="h-full overflow-hidden bg-background w-full rounded-xl border">
-          <AppSidebarHeader />
-          {children}
-        </section>
+      <main className="flex-1 bg-background h-full rounded-xl overflow-hidden border flex flex-col">
+        <AppSidebarHeader />
+        <section className="h-[calc(100svh-16px-48px)] overflow-y-scroll scrollbar-hidden">{children}</section>
       </main>
     </SidebarProvider>
   );

@@ -23,7 +23,7 @@ interface Props {
 const QuestionListSidebar: FC<Props> = ({ form }) => {
   const questions = form.watch("questions") || [];
   return (
-    <aside className="w-3/12 h-full space-y-4 bg-sidebar p-4 border-l">
+    <aside className="w-3/12 h-full overflow-y-scroll scrollbar-hidden space-y-4 bg-sidebar p-4 border-l">
       <div className="flex justify-between items-center">
         <span className="text-xs font-medium">Questions </span>
         <DropdownMenu>

@@ -26,7 +26,7 @@ const QuestionBuilderForm: FC<Props> = ({ form }) => {
   });
   return (
     <Form {...form}>
-      <form className="h-full flex-1 space-y-5 p-4 w-full">
+      <form className="h-full overflow-y-scroll flex-1 space-y-5 p-4 w-full scrollbar-hidden">
         {questions.map((_, i) => (
           <QuestionCard key={i} form={form} questionIndex={i} removeQuestion={() => removeQuestion(i)} />
         ))}
