@@ -52,9 +52,26 @@ const getQuizWithQuestion = asyncHandler(async (req, res) => {
   });
 });
 
+const batchQuizQuestions = asyncHandler(async (req, res) => {
+  const { quizId } = req.params;
+  if (!quizId) throw new ApiError(StatusCodes.NOT_FOUND, "Quiz identifier not found!");
+
+  const payload = req.body;
+
+  await QuizServices.batchQuestions({ ...payload, quizId }, req.user.id!);
+
+  ApiResponse(res, {
+    data: {},
+    message: "Questions handled successfully",
+    success: true,
+    statusCode: StatusCodes.OK,
+  });
+});
+
 export const QuizControllers = {
   createQuiz,
   getAllQuiz,
   getAllQuizByUserId,
   getQuizWithQuestion,
+  batchQuizQuestions,
 };
