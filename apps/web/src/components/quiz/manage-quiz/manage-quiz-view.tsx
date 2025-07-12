@@ -1,8 +1,9 @@
 "use client";
+import { processQuizDataToFormValues } from "@/utilities/quiz";
 import { useForm, zodResolver } from "@quibly/utils/hook-form";
 import { QuizWithQsn } from "@quibly/utils/types";
 import { CreateQuestionFormData, CreateQuestionSchema } from "@quibly/utils/validations";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Header from "./header";
 import QuestionBuilderForm from "./question-builder-form";
 import QuestionListSidebar from "./question-list-sidebar";
@@ -32,6 +33,12 @@ const ManageQuizView = ({ quiz }: { quiz: QuizWithQsn }) => {
       setSelectedQuestion(idx);
     }
   };
+
+  useEffect(() => {
+    console.log(quiz);
+    console.log(processQuizDataToFormValues(quiz));
+    form.setValue("questions", processQuizDataToFormValues(quiz));
+  }, [quiz.questions]);
 
   return (
     <div className="divide-y h-full flex flex-col">

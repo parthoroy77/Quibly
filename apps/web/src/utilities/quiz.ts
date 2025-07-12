@@ -1,5 +1,5 @@
 import { UseFormReturn } from "@quibly/utils/hook-form";
-import { QuestionType } from "@quibly/utils/types";
+import { QuestionType, QuizWithQsn } from "@quibly/utils/types";
 import { CreateQuestionFormData } from "@quibly/utils/validations";
 
 type QuestionOption = CreateQuestionFormData["questions"][0]["options"][0];
@@ -27,7 +27,7 @@ export const TRUE_FALSE_OPTIONS: QuestionOption[] = [
 // Factory: Short Answer option
 export const createShortAnswerOption = (): QuestionOption => ({
   index: 0,
-  text: "",
+  text: "Demo Text",
   isCorrect: true,
   correctAnswer: "",
   mode: "create",
@@ -75,4 +75,34 @@ export const handleAddNewQuestion = (type: QuestionType, form: UseFormReturn<Cre
   }
 
   form.setValue("questions", [...currentQuestions, baseQuestion]);
+};
+
+export const processQuizDataToFormValues = (quiz: QuizWithQsn): CreateQuestionFormData["questions"] => {
+  return quiz.questions.map((q) => ({
+    text: q.text,
+    required: q.required,
+    randomizeOrder: q.randomizeOrder,
+    type: q.type as any as QuestionType,
+    points: q.points,
+    index: q.index,
+    timeLimit: q.timeLimit,
+    explanation: q.explanation ?? "",
+    mode: "update",
+    questionId: q.id,
+    options: q.options.map((o) => ({
+      optionId: o.id,
+      index: o.index,
+      text: o.text ?? "",
+      isCorrect:
+        q.type === "multiple_choice_single"
+          ? o.correctAnswer.some((el) => el.optionId === o.id)
+          : q.type === "multiple_choice_multi"
+            ? o.correctMultiSelectOptions.some((el) => el.optionId === o.id)
+            : q.type === "true_false"
+              ? o.correctAnswer.some((el) => el.optionId === o.id)
+              : false,
+      correctAnswer: q.type === "short_answer" ? (o.correctAnswer[0]!.textAnswer as string | undefined) : undefined,
+      mode: "update",
+    })),
+  }));
 };
