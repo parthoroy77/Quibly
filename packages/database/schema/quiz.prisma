@@ -17,15 +17,17 @@ model Quiz {
 }
 
 model Question {
-  id          String       @id @default(cuid())
-  quizId      String
-  text        String
-  type        QuestionType
-  points      Int          @default(1)
-  mediaUrl    String?
-  explanation String?
-  index       Int
-  timeLimit   Int          @default(30)
+  id             String       @id @default(cuid())
+  quizId         String
+  text           String
+  required       Boolean      @default(true)
+  randomizeOrder Boolean      @default(false)
+  type           QuestionType
+  points         Int          @default(1)
+  index          Int
+  timeLimit      Int          @default(30)
+  mediaUrl       String?
+  explanation    String?
 
   // timestamps
   createdAt DateTime @default(now())
@@ -52,8 +54,8 @@ model QuestionOption {
   id         String  @id @default(cuid())
   questionId String
   text       String
-  mediaUrl   String?
   index      Int
+  mediaUrl   String?
 
   // timestamps
   createdAt DateTime @default(now())
