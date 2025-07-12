@@ -1,3 +1,4 @@
+import { batchQuestions } from "@/actions/quiz";
 import { createMultipleChoiceOptions, createShortAnswerOption, TRUE_FALSE_OPTIONS } from "@/utilities/quiz";
 import { Button } from "@quibly/ui/components/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@quibly/ui/components/form";
@@ -6,6 +7,7 @@ import { Label } from "@quibly/ui/components/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@quibly/ui/components/select";
 import { Separator } from "@quibly/ui/components/separator";
 import SingleFileUpload from "@quibly/ui/components/single-file-uploader";
+import { toast } from "@quibly/ui/components/sonner";
 import { Switch } from "@quibly/ui/components/switch";
 import { Textarea } from "@quibly/ui/components/textarea";
 import { cn } from "@quibly/ui/lib/utils";
@@ -14,7 +16,7 @@ import { useFieldArray, UseFormReturn } from "@quibly/utils/hook-form";
 import { QuestionType } from "@quibly/utils/types";
 import { CreateQuestionFormData } from "@quibly/utils/validations";
 import { FileQuestion, GripVertical, Plus, SaveAll, Sparkles, Trash2 } from "lucide-react";
-import { FC, RefObject, useState } from "react";
+import { FC, RefObject, useState, useTransition } from "react";
 
 interface Props {
   form: UseFormReturn<CreateQuestionFormData>;
@@ -26,6 +28,7 @@ interface Props {
 }
 
 const QuestionBuilderForm: FC<Props> = ({ form, containerRef, questionRefs, selected }) => {
+  const [isPending, startTransition] = useTransition();
   const { fields: questions, remove: removeQuestion } = useFieldArray({
     control: form.control,
     name: `questions`,
@@ -46,10 +49,18 @@ const QuestionBuilderForm: FC<Props> = ({ form, containerRef, questionRefs, sele
   };
 
   const onSubmit = async (values: CreateQuestionFormData) => {
+    const toastId = toast.loading("Processing your request", { duration: 2000 });
     const create = values.questions.filter((q) => q.mode === "create");
     const update = values.questions.filter((q) => q.mode === "delete");
     const remove = values.questions.filter((q) => q.mode === "delete").map((q) => q.questionId);
-    console.log(create, update, remove);
+    startTransition(async () => {
+      const result = await batchQuestions({ create, update, remove }, values.quizId);
+      if (result.success) {
+        toast.success(result.message, { id: toastId });
+      } else {
+        toast.error(result.message, { id: toastId });
+      }
+    });
   };
 
   return (
@@ -65,9 +76,9 @@ const QuestionBuilderForm: FC<Props> = ({ form, containerRef, questionRefs, sele
             <Sparkles />
           </Button>
           {!!questions.length && (
-            <Button type="submit">
+            <Button disabled={isPending} type="submit" variant={"default"}>
               <SaveAll />
-              Save
+              {isPending ? "...Saving" : "Save"}
             </Button>
           )}
         </div>

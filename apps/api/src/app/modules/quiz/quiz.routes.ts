@@ -16,8 +16,8 @@ router.post(
   authMiddleware(UserRole.educator),
   zodSafeParse(
     z.object({
-      create: QuestionSchema,
-      update: QuestionSchema,
+      create: z.array(QuestionSchema),
+      update: z.array(QuestionSchema),
       remove: z.array(z.string()),
     })
   ),
