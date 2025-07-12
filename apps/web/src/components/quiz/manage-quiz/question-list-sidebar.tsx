@@ -18,9 +18,11 @@ import { FC } from "react";
 
 interface Props {
   form: UseFormReturn<CreateQuestionFormData>;
+  onQsnSelect: (idx: number) => void;
+  selected: number;
 }
 
-const QuestionListSidebar: FC<Props> = ({ form }) => {
+const QuestionListSidebar: FC<Props> = ({ form, onQsnSelect, selected }) => {
   const questions = form.watch("questions") || [];
   return (
     <aside className="w-3/12 h-full overflow-y-scroll scrollbar-hidden space-y-4 bg-sidebar p-4 border-l">
@@ -44,7 +46,14 @@ const QuestionListSidebar: FC<Props> = ({ form }) => {
         </DropdownMenu>
       </div>
       {questions.map((q, i) => (
-        <div className="p-4 rounded-xl border bg-background space-y-3 cursor-pointer" key={i}>
+        <div
+          className={cn(
+            "p-4 rounded-xl border bg-background space-y-3 cursor-pointer",
+            selected === i && "border-primary"
+          )}
+          key={i}
+          onClick={() => onQsnSelect(i)}
+        >
           <div className="flex items-center gap-2 ">
             <span className="font-instrumental-sans bg-secondary font-bold size-6 text-sm flex items-center justify-center rounded-full border shrink-0">
               {i + 1}

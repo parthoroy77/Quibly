@@ -8,27 +8,40 @@ import { Separator } from "@quibly/ui/components/separator";
 import SingleFileUpload from "@quibly/ui/components/single-file-uploader";
 import { Switch } from "@quibly/ui/components/switch";
 import { Textarea } from "@quibly/ui/components/textarea";
+import { cn } from "@quibly/ui/lib/utils";
 import { toNormalCase } from "@quibly/utils/functions";
 import { useFieldArray, UseFormReturn } from "@quibly/utils/hook-form";
 import { QuestionType } from "@quibly/utils/types";
 import { CreateQuestionFormData } from "@quibly/utils/validations";
 import { FileQuestion, GripVertical, Plus, Trash2 } from "lucide-react";
-import { FC, useState } from "react";
+import { FC, RefObject, useState } from "react";
 
 interface Props {
   form: UseFormReturn<CreateQuestionFormData>;
+  containerRef: RefObject<HTMLFormElement | null>;
+  questionRefs: RefObject<{
+    [id: number]: HTMLDivElement | null;
+  }>;
+  selected: number;
 }
 
-const QuestionBuilderForm: FC<Props> = ({ form }) => {
+const QuestionBuilderForm: FC<Props> = ({ form, containerRef, questionRefs, selected }) => {
   const { fields: questions, remove: removeQuestion } = useFieldArray({
     control: form.control,
     name: `questions`,
   });
   return (
     <Form {...form}>
-      <form className="h-full overflow-y-scroll flex-1 space-y-5 p-4 w-full scrollbar-hidden">
+      <form className="h-full overflow-y-scroll flex-1 space-y-5 p-4 w-full scrollbar-hidden" ref={containerRef}>
         {questions.map((_, i) => (
-          <QuestionCard key={i} form={form} questionIndex={i} removeQuestion={() => removeQuestion(i)} />
+          <QuestionCard
+            key={i}
+            form={form}
+            questionIndex={i}
+            removeQuestion={() => removeQuestion(i)}
+            questionRefs={questionRefs}
+            selected={selected}
+          />
         ))}
       </form>
     </Form>
@@ -39,8 +52,12 @@ interface CardProps {
   questionIndex: number;
   form: Props["form"];
   removeQuestion: () => void;
+  questionRefs: RefObject<{
+    [id: number]: HTMLDivElement | null;
+  }>;
+  selected: number;
 }
-const QuestionCard: FC<CardProps> = ({ questionIndex, form, removeQuestion }) => {
+const QuestionCard: FC<CardProps> = ({ questionIndex, questionRefs, form, removeQuestion, selected }) => {
   const [media, setMedia] = useState(false);
   const {
     append: appendOption,
@@ -86,7 +103,15 @@ const QuestionCard: FC<CardProps> = ({ questionIndex, form, removeQuestion }) =>
     }
   };
   return (
-    <div className="border *:p-3 divide-y rounded-xl w-full h-fit [&_input]:bg-sidebar [&_textarea]:bg-sidebar">
+    <div
+      ref={(el) => {
+        questionRefs.current[questionIndex] = el;
+      }}
+      className={cn(
+        "border *:p-3 divide-y rounded-xl w-full h-fit [&_input]:bg-sidebar [&_textarea]:bg-sidebar",
+        selected === questionIndex && "border-accent shadow-sm"
+      )}
+    >
       <div className="flex items-center justify-between ">
         <div className="flex items-center gap-1 text-sm font-medium">
           <FileQuestion size={16} />
