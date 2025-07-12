@@ -10,8 +10,18 @@ const DEFAULT_TIME_LIMIT = 1;
 
 // Factory: True/False options
 export const TRUE_FALSE_OPTIONS: QuestionOption[] = [
-  { index: 0, text: "True", isCorrect: true },
-  { index: 1, text: "False", isCorrect: false },
+  {
+    index: 0,
+    text: "True",
+    isCorrect: true,
+    mode: "create",
+  },
+  {
+    index: 1,
+    text: "False",
+    isCorrect: false,
+    mode: "create",
+  },
 ];
 
 // Factory: Short Answer option
@@ -20,6 +30,7 @@ export const createShortAnswerOption = (): QuestionOption => ({
   text: "",
   isCorrect: true,
   correctAnswer: "",
+  mode: "create",
 });
 
 // Factory: Multiple Choice (Single or Multi)
@@ -27,8 +38,9 @@ export const createMultipleChoiceOptions = (count = 4): QuestionOption[] =>
   Array.from({ length: count }).map((_, i) => ({
     index: i,
     text: "",
-    isCorrect: false,
+    isCorrect: i === 0,
     correctAnswer: "",
+    mode: "create",
   }));
 
 export const handleAddNewQuestion = (type: QuestionType, form: UseFormReturn<CreateQuestionFormData>) => {
@@ -44,6 +56,7 @@ export const handleAddNewQuestion = (type: QuestionType, form: UseFormReturn<Cre
     randomizeOrder: false,
     explanation: "",
     options: [],
+    mode: "create",
   };
 
   switch (type) {

@@ -1,6 +1,6 @@
 import { createMultipleChoiceOptions, createShortAnswerOption, TRUE_FALSE_OPTIONS } from "@/utilities/quiz";
 import { Button } from "@quibly/ui/components/button";
-import { Form, FormControl, FormField, FormItem, FormLabel } from "@quibly/ui/components/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@quibly/ui/components/form";
 import { Input } from "@quibly/ui/components/input";
 import { Label } from "@quibly/ui/components/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@quibly/ui/components/select";
@@ -13,7 +13,7 @@ import { toNormalCase } from "@quibly/utils/functions";
 import { useFieldArray, UseFormReturn } from "@quibly/utils/hook-form";
 import { QuestionType } from "@quibly/utils/types";
 import { CreateQuestionFormData } from "@quibly/utils/validations";
-import { FileQuestion, GripVertical, Plus, Trash2 } from "lucide-react";
+import { FileQuestion, GripVertical, Plus, SaveAll, Sparkles, Trash2 } from "lucide-react";
 import { FC, RefObject, useState } from "react";
 
 interface Props {
@@ -30,19 +30,59 @@ const QuestionBuilderForm: FC<Props> = ({ form, containerRef, questionRefs, sele
     control: form.control,
     name: `questions`,
   });
+
+  const removeQsn = (idx: number) => {
+    const question = questions[idx];
+    if (!question) return;
+
+    if (question.questionId) {
+      form.setValue(
+        "questions",
+        questions.map((q) => (q.questionId === question.questionId ? { ...q, mode: "delete" } : q))
+      );
+    } else {
+      removeQuestion(idx);
+    }
+  };
+
+  const onSubmit = async (values: CreateQuestionFormData) => {
+    const create = values.questions.filter((q) => q.mode === "create");
+    const update = values.questions.filter((q) => q.mode === "delete");
+    const remove = values.questions.filter((q) => q.mode === "delete").map((q) => q.questionId);
+    console.log(create, update, remove);
+  };
+
   return (
     <Form {...form}>
-      <form className="h-full overflow-y-scroll flex-1 space-y-5 p-4 w-full scrollbar-hidden" ref={containerRef}>
-        {questions.map((_, i) => (
-          <QuestionCard
-            key={i}
-            form={form}
-            questionIndex={i}
-            removeQuestion={() => removeQuestion(i)}
-            questionRefs={questionRefs}
-            selected={selected}
-          />
-        ))}
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="h-full overflow-y-scroll flex-1 space-y-5 p-4 w-full scrollbar-hidden"
+        ref={containerRef}
+      >
+        <div className="flex justify-end gap-3">
+          <Button type="button" variant={"secondary"}>
+            Generate from AI
+            <Sparkles />
+          </Button>
+          {!!questions.length && (
+            <Button type="submit">
+              <SaveAll />
+              Save
+            </Button>
+          )}
+        </div>
+        {questions
+          .filter((q) => q.mode !== "delete")
+          .map((_, i) => (
+            <QuestionCard
+              key={i}
+              form={form}
+              questionIndex={i}
+              removeQuestion={() => removeQsn(i)}
+              questionRefs={questionRefs}
+              selected={selected}
+            />
+          ))}
       </form>
     </Form>
   );
@@ -102,6 +142,21 @@ const QuestionCard: FC<CardProps> = ({ questionIndex, questionRefs, form, remove
         appendOption(TRUE_FALSE_OPTIONS);
     }
   };
+
+  const handleRemoveOption = (idx: number) => {
+    const option = options[idx];
+    if (!option) return;
+
+    if (option.optionId) {
+      form.setValue(
+        `questions.${questionIndex}.options`,
+        options.map((o) => (o.optionId === option.optionId ? { ...o, mode: "delete" } : o))
+      );
+    } else {
+      removeOption(idx);
+    }
+  };
+
   return (
     <div
       ref={(el) => {
@@ -190,6 +245,7 @@ const QuestionCard: FC<CardProps> = ({ questionIndex, questionRefs, form, remove
               <FormControl>
                 <Textarea {...field} maxLength={100} placeholder="Write your question here!" className="resize-none" />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -216,29 +272,35 @@ const QuestionCard: FC<CardProps> = ({ questionIndex, questionRefs, form, remove
                   <FormField
                     control={form.control}
                     name={`questions.${questionIndex}.options.${optionIndex}.isCorrect`}
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormControl>
-                          <input
-                            type={questionType === QuestionType.multiple_choice_single ? "radio" : "checkbox"}
-                            name={
-                              questionType === QuestionType.multiple_choice_single
-                                ? `question-${questionIndex}-correct`
-                                : undefined
-                            }
-                            className="size-4 mr-1 ml-1"
-                            checked={field.value}
-                            onChange={(e) => {
-                              if (questionType === QuestionType.multiple_choice_single) {
-                                handleCorrectAnswerChange(optionIndex);
-                              } else {
-                                field.onChange(e.target.checked);
+                    render={({ field, fieldState }) => {
+                      const isError = !!fieldState.error;
+                      return (
+                        <FormItem>
+                          <FormControl>
+                            <input
+                              type={questionType === QuestionType.multiple_choice_single ? "radio" : "checkbox"}
+                              name={
+                                questionType === QuestionType.multiple_choice_single
+                                  ? `question-${questionIndex}-correct`
+                                  : undefined
                               }
-                            }}
-                          />
-                        </FormControl>
-                      </FormItem>
-                    )}
+                              className={cn(
+                                "size-4 mr-1 ml-1 rounded-full",
+                                isError && "border-destructive ring-1 ring-destructive"
+                              )}
+                              checked={field.value}
+                              onChange={(e) => {
+                                if (questionType === QuestionType.multiple_choice_single) {
+                                  handleCorrectAnswerChange(optionIndex);
+                                } else {
+                                  field.onChange(e.target.checked);
+                                }
+                              }}
+                            />
+                          </FormControl>
+                        </FormItem>
+                      );
+                    }}
                   />
 
                   {/* Option Text */}
@@ -262,7 +324,7 @@ const QuestionCard: FC<CardProps> = ({ questionIndex, questionRefs, form, remove
                     type="button"
                     size="icon"
                     variant="ghost"
-                    onClick={() => removeOption(optionIndex)}
+                    onClick={() => handleRemoveOption(optionIndex)}
                     disabled={options.length <= 2}
                   >
                     <Trash2 color="red" />
