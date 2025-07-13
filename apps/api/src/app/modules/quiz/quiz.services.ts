@@ -10,30 +10,54 @@ const create = async (payload: QuizCreatePayload) => {
 
 // TODO: Add filters
 const getAll = async () => {
-  return await db.quiz.findMany({
+  const quizzes = await db.quiz.findMany({
     include: {
       questions: {
-        select: { _count: true },
+        select: { id: true, timeLimit: true, points: true },
       },
     },
     orderBy: {
       createdAt: "desc",
     },
   });
+
+  const result = quizzes.map((q) => {
+    const { questions, ...rest } = q;
+    return {
+      ...rest,
+      questionCount: q.questions.length,
+      estimateTime: q.questions.reduce((total, el) => (total += el.timeLimit), 0),
+      totalPoints: q.questions.reduce((total, el) => (total += el.points), 0),
+    };
+  });
+
+  return result;
 };
 
 const getByUserId = async (userId: string) => {
-  return await db.quiz.findMany({
+  const quizzes = await db.quiz.findMany({
     where: { userId },
     include: {
       questions: {
-        select: { _count: true },
+        select: { id: true, timeLimit: true, points: true },
       },
     },
     orderBy: {
       createdAt: "desc",
     },
   });
+
+  const result = quizzes.map((q) => {
+    const { questions, ...rest } = q;
+    return {
+      ...rest,
+      questionCount: q.questions.length,
+      estimateTime: q.questions.reduce((total, el) => (total += el.timeLimit), 0),
+      totalPoints: q.questions.reduce((total, el) => (total += el.points), 0),
+    };
+  });
+
+  return result;
 };
 
 const getWithQuestions = async (id: string) => {

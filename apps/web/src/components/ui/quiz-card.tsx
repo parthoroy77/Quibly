@@ -1,4 +1,3 @@
-import { Badge } from "@quibly/ui/components/badge";
 import { Button } from "@quibly/ui/components/button";
 import {
   DropdownMenu,
@@ -6,48 +5,49 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@quibly/ui/components/dropdown-menu";
+import { Quiz } from "@quibly/utils/types";
+import { formatDistanceToNow } from "date-fns";
 import {
   ChartNoAxesGantt,
   CircleFadingPlus,
   Copy,
   Ellipsis,
   FileQuestion,
-  Layers2,
   ScrollText,
   Settings,
   Settings2,
+  Waypoints,
 } from "lucide-react";
+import { FC } from "react";
 
-const QuizCard = () => {
+interface Props {
+  quiz: Quiz & { questionCount: number; estimateTime: number; totalPoints: number };
+}
+const QuizCard: FC<Props> = ({ quiz }) => {
+  const { title, description, updatedAt, questionCount, totalPoints, estimateTime } = quiz;
   return (
-    <div className="rounded-xl bg-sidebar relative border shadow-sm p-2 space-y-2">
+    <div className="rounded-xl bg-sidebar relative border shadow-sm p-2 space-y-2 flex flex-col justify-between">
       <div className="h-24 bg-red-200 rounded-lg" />
-      <h2 className="font-semibold font-instrumental-sans tracking-wide">Software Development & AI Enhancement</h2>
-      <p className="line-clamp-2 text-xs font-medium text-muted-foreground">
-        This quiz explores the intersection of software development and artificial intelligence (AI), focusing on how AI
-        technologies are enhancing the software development lifecycle. It covers AI-driven tools, automation, code
-        generation, testing, and ethical considerations. Whether you're a developer, manager, or tech enthusiast, this
-        quiz will help you assess your knowledge of how AI is transforming modern software engineering.
-      </p>
+      <h2 className="font-semibold line-clamp-1 font-instrumental-sans tracking-wide">{title}</h2>
+      <p className="line-clamp-2 text-xs font-medium text-muted-foreground">{description}</p>
       <div className="font-medium flex justify-between gap-2">
         <div className="text-xs inline-flex gap-1 items-center">
           <FileQuestion size={14} />
-          <span>30 Questions</span>
+          <span>{questionCount} Qsn</span>
         </div>
         <div className="text-xs inline-flex gap-1 items-center">
           <CircleFadingPlus size={14} />
-          <span className="font-semibold">Estimate time: </span>
-          <span>1h</span>
+          <span>{estimateTime} min</span>
+        </div>
+        <div className="text-xs inline-flex gap-1 items-center">
+          <Waypoints size={14} />
+          <span>{totalPoints}pts</span>
         </div>
       </div>
-      <Badge className="text-xs inline-flex bg-secondary text-primary dark:text-white border-primary/40 gap-1 absolute top-2 right-2 p-1 rounded-lg border px-2 items-center">
-        <Layers2 size={14} />
-        <span>{"Scheduled"}</span>
-      </Badge>
       <div className="flex justify-between items-center ">
         <h6 className="inline-flex gap-2">
           <Settings2 size={14} />
-          Edited 3d ago
+          Edited {formatDistanceToNow(new Date(updatedAt), { addSuffix: true, includeSeconds: false })}
         </h6>
         <div className="flex items-center  gap-2">
           <DropdownMenu>

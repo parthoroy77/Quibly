@@ -9,8 +9,12 @@ export const createQuiz = async (data: CreateQuizFormData) => {
 };
 
 export const getUserQuizzes = async () => {
-  const result = await serverFetcher<Quiz[]>("/quizzes/teacher/", { method: "GET" });
-  return result.data;
+  const result = await serverFetcher<
+    Array<Quiz & { questionCount: number; estimateTime: number; totalPoints: number }>
+  >("/quizzes/user/", {
+    method: "GET",
+  });
+  return result.data || [];
 };
 
 export const getQuizWithQuestion = async (id: string) => {
