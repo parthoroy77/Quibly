@@ -50,8 +50,8 @@ const Header = () => {
   return (
     <Container
       className={cn(
-        "dark:bg-transparent dark:backdrop-blur-xl top-3 duration-300 transition-all fixed h-14 inset-x-0 z-[999] flex py-2 items-center justify-between rounded-xl px-2 border ",
-        scrolled ? "border-border bg-white border" : "sm:w-full sm:bg-transparent border-transparent"
+        "dark:bg-transparent dark:backdrop-blur-xl top-3 duration-300 transition-all fixed h-14 inset-x-0 z-[999] flex py-2 items-center justify-between rounded-xl px-2 border",
+        scrolled ? "border-border bg-white border w-2/3 shadow-md" : "sm:w-full sm:bg-transparent border-transparent"
       )}
     >
       <div className="flex items-center gap-3">

@@ -1,8 +1,8 @@
+import { AuroraText } from "@/components/shared/aurora-text";
+import { BlurFade } from "@/components/shared/blur-fade";
 import { Button } from "@quibly/ui/components/button";
 import Image from "next/image";
 import dashImg from "../../../public/quiz.png";
-import { AuroraText } from "../shared/aurora-text";
-import { BlurFade } from "../shared/blur-fade";
 
 const HeroSection = () => {
   return (
