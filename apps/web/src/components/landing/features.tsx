@@ -3,7 +3,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@quibly/ui/components/
 const Features = () => {
   return (
     <Container className=" py-10">
-      <Tabs defaultValue="educator" className="w-4/5 mx-auto">
+      <Tabs defaultValue="student" className="w-4/5 mx-auto">
         <div className="flex flex-col gap-2 items-center justify-between">
           <span className="text-3xl font-instrumental-serif font-bold">Features</span>
           <p className="text-sm">✨ One platform. Two experiences. One goal: Better learning.</p>
@@ -16,7 +16,7 @@ const Features = () => {
           <EducatorFeature />
         </TabsContent>
         <TabsContent value="student">
-          <div></div>
+          <StudentFeature />
         </TabsContent>
       </Tabs>
     </Container>
@@ -91,6 +91,57 @@ const EducatorFeature = () => {
         <div className="flex justify-center h-52 px-8 ">
           <div className="h-full w-full bg-secondary rounded-xl border rounded-b-none"></div>
         </div>
+      </div>
+    </div>
+  );
+};
+
+const StudentFeature = () => {
+  return (
+    <div className="grid grid-cols-6 gap-4 mt-8">
+      <div className="col-span-4 bg-white dark:bg-muted/40 rounded-2xl shadow">
+        <div className="p-6">
+          <h3 className="font-instrumental-serif font-semibold mb-2">🚀 Instant Access with Code or Link</h3>
+          <p className="text-sm text-muted-foreground">
+            No account? No problem. Join any quiz instantly using a code or shared link — no apps or downloads needed.
+          </p>
+        </div>
+      </div>
+
+      <div className="col-span-2 bg-white dark:bg-muted/40 p-6 rounded-2xl shadow">
+        <h3 className="font-instrumental-serif font-semibold mb-2">🧠 Smooth Quiz Experience</h3>
+        <p className="text-sm text-muted-foreground">
+          A clear and responsive interface with timers, answer formats, and question progress — works on every device
+        </p>
+      </div>
+
+      <div className="col-span-3 bg-white dark:bg-muted/40 p-6 rounded-2xl shadow">
+        <h3 className="font-instrumental-serif font-semibold mb-2">🔄 Real-Time Feedback</h3>
+        <p className="text-sm text-muted-foreground">
+          See whether your answer was correct immediately (if enabled by your teacher). Learn and improve as you go.
+        </p>
+      </div>
+
+      <div className="col-span-3 bg-white dark:bg-muted/40 p-6 rounded-2xl shadow">
+        <h3 className="font-instrumental-serif font-semibold mb-2">🏆 Live Leaderboards</h3>
+        <p className="text-sm text-muted-foreground">
+          Compete with classmates during live sessions and track your rank in real-time — boost motivation through
+          friendly challenge.
+        </p>
+      </div>
+
+      <div className="col-span-3 bg-white dark:bg-muted/40 p-6 rounded-2xl shadow">
+        <h3 className="font-instrumental-serif font-semibold mb-2">📚 Quiz History & Review</h3>
+        <p className="text-sm text-muted-foreground">
+          Revisit previous quizzes, scores, and answers. Reflect on past performance and focus on improvement.
+        </p>
+      </div>
+
+      <div className="col-span-3 bg-white dark:bg-muted/40 p-6 rounded-2xl shadow">
+        <h3 className="font-instrumental-serif font-semibold mb-2">🔒 Simple & Secure</h3>
+        <p className="text-sm text-muted-foreground">
+          Join anonymously or with a student account. No spam, no tracking — just a safe, focused learning environment.
+        </p>
       </div>
     </div>
   );
