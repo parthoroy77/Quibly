@@ -9,7 +9,8 @@
     "format": "npx prisma format",
     "studio": "npx prisma studio --schema=./schema --browser none",
     "prebuild": "pnpm run generate",
-    "predev": "pnpm run generate"
+    "predev": "pnpm run generate",
+    "postinstall": "pnpm generate"
   },
   "keywords": [],
   "author": "",

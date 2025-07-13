@@ -51,13 +51,15 @@ const HeroSection = () => {
           </div>
         </BlurFade>
       </div>
-      <div className="w-[90%] lg:w-4/5 md:h-[700px] bg-white dark:bg-sidebar md:rounded-b-none border rounded-[2rem] overflow-hidden pb-0 z-10 p-2">
-        <Image
-          src={dashImg}
-          alt="Dash image"
-          className="rounded-3xl h-full object-cover object-top bg-secondary rounded-b-none border"
-        />
-      </div>
+      <BlurFade className="w-full flex justify-center" delay={0.8} offset={-30}>
+        <div className="w-[90%] lg:w-4/5 md:h-[700px] bg-white dark:bg-sidebar md:rounded-b-none border rounded-[2rem] overflow-hidden pb-0 z-10 p-2">
+          <Image
+            src={dashImg}
+            alt="Dash image"
+            className="rounded-3xl h-full object-cover object-top bg-secondary rounded-b-none border"
+          />
+        </div>
+      </BlurFade>
       <div className="pointer-events-none dark:hidden absolute inset-x-0 -bottom-12 h-1/3 bg-gradient-to-t from-background via-background to-transparent lg:h-1/4 z-10"></div>
     </div>
   );
