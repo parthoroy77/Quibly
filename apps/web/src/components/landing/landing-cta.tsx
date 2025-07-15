@@ -3,7 +3,7 @@ import { Container } from "@quibly/ui/components/container";
 
 const LandingCTA = () => {
   return (
-    <section>
+    <section className="mt-10 mb-20">
       <Container className=" bg-gradient-to-br from-accent to-accent-foreground via-accent py-16 rounded-3xl h-full mx-auto text-center">
         <h2 className="text-4xl md:text-5xl font-bold mb-6 font-instrumental-serif">
           Ready to transform your teaching or learning experience?
