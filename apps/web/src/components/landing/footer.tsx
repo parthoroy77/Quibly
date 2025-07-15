@@ -117,7 +117,7 @@ const Footer = () => {
         {/* Bottom Bar */}
         <div className="border-t mt-12 pt-6 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-muted-foreground text-sm">© 2025 Quibly. All rights reserved.</p>
-          <div className="flex space-x-6 text-sm">
+          <div className="flex space-x-6 text-xs sm:text-sm *:truncate">
             <a href="#privacy" className="text-muted-foreground hover:text-foreground transition-colors">
               Privacy Policy
             </a>

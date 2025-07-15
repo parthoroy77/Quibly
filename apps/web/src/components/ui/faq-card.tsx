@@ -26,7 +26,7 @@ export default function FAQCard({ title, children, defaultOpen = false }: Accord
         onClick={() => setIsOpen(!isOpen)}
         className="flex w-full cursor-pointer items-center justify-between text-left font-medium"
       >
-        <span>{title}</span>
+        <span className="text-sm sm:text-base ">{title}</span>
         {isOpen ? (
           <ChevronUp className="h-5 w-5 transition-transform duration-300" />
         ) : (

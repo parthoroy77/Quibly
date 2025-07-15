@@ -21,7 +21,7 @@ const HeroSection = () => {
         }}
       />
       <div className="space-y-5 text-center flex justify-center items-center flex-col pt-36">
-        <h1 className="relative space-y-0 leading-16 sm:leading-20 space-x-3 text-4xl font-extrabold font-instrumental-serif tracking-tight sm:space-x-5  md:text-6xl lg:text-6xl">
+        <h1 className="relative space-y-0 leading-12 sm:leading-20 space-x-3 text-3xl font-extrabold font-instrumental-serif tracking-tight sm:space-x-5  md:text-6xl lg:text-6xl">
           <BlurFade className="inline-block" delay={0.3}>
             <span>
               Create <AuroraText>Quizzes</AuroraText> Instantly with <AuroraText>AI</AuroraText>,

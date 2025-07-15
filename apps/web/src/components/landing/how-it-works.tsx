@@ -5,7 +5,7 @@ const HowItWorks = () => {
   return (
     <section className="mt-20 mb-10">
       <Container className="flex justify-center items-center">
-        <Tabs defaultValue="student" className="mx-auto w-4/5">
+        <Tabs defaultValue="student" className="mx-auto md:w-4/5">
           <div className="flex flex-col gap-2 items-center justify-between">
             <span className="text-3xl font-instrumental-serif font-bold">How It Works</span>
             <TabsList className="bg-secondary">
@@ -29,7 +29,7 @@ const EducatorFlow = () => {
   return (
     <div className="mt-10 grid grid-cols-12 gap-4">
       {/* AI Quiz Generator */}
-      <div className="col-span-6 bg-white dark:bg-muted/40 border rounded-2xl flex flex-col justify-between overflow-hidden">
+      <div className="col-span-12 md:col-span-6 bg-white dark:bg-muted/40 border rounded-2xl flex flex-col justify-between overflow-hidden">
         <div className="p-6">
           <h3 className="font-instrumental-serif font-semibold mb-2">Generate Quiz using AI ✨</h3>
           <p className="text-sm text-muted-foreground">
@@ -43,7 +43,7 @@ const EducatorFlow = () => {
       </div>
 
       {/* Custom Quiz */}
-      <div className="col-span-6 bg-white dark:bg-muted/40 border rounded-2xl flex flex-col justify-between overflow-hidden">
+      <div className="col-span-12 md:col-span-6 bg-white dark:bg-muted/40 border rounded-2xl flex flex-col justify-between overflow-hidden">
         <div className="p-6">
           <h3 className="font-instrumental-serif font-semibold mb-2">️Custom you Quiz Question 🛠</h3>
           <p className="text-sm text-muted-foreground">
@@ -59,8 +59,8 @@ const EducatorFlow = () => {
       {/* Host & Track */}
       <div className="col-span-12 grid grid-cols-6 gap-4">
         {/* Host Quiz Sessions */}
-        <div className="col-span-4 grid grid-cols-2 gap-4">
-          <div className="col-span-2 bg-white dark:bg-muted/40 rounded-2xl border">
+        <div className="col-span-6 md:col-span-4 gap-4">
+          <div className="bg-white dark:bg-muted/40 rounded-2xl border">
             <div className="p-6">
               <h3 className="font-instrumental-serif font-semibold mb-2">Host Quiz Sessions 📡</h3>
               <p className="text-sm text-muted-foreground">
@@ -77,7 +77,7 @@ const EducatorFlow = () => {
         </div>
 
         {/* Track Student Insights */}
-        <div className="col-span-2 bg-white dark:bg-muted/40 border rounded-2xl flex flex-col justify-between overflow-hidden">
+        <div className="col-span-6 md:col-span-2 bg-white dark:bg-muted/40 border rounded-2xl flex flex-col justify-between overflow-hidden">
           <div className="p-6">
             <h3 className="font-instrumental-serif font-semibold mb-2">Track Student Insights📊</h3>
             <p className="text-sm text-muted-foreground">
@@ -109,7 +109,7 @@ const StudentFlow = () => {
   return (
     <div className="grid grid-cols-6 gap-4 mt-8">
       {/* Join Quiz Session */}
-      <div className="col-span-4 bg-white dark:bg-muted/40 rounded-2xl shadow">
+      <div className="col-span-6 md:col-span-4 bg-white dark:bg-muted/40 rounded-2xl shadow">
         <div className="p-6">
           <h3 className="font-instrumental-serif font-semibold mb-2">Join Quiz Session using Code or Link 🚀</h3>
           <p className="text-sm text-muted-foreground">
@@ -119,7 +119,7 @@ const StudentFlow = () => {
       </div>
 
       {/* Smooth Participation */}
-      <div className="col-span-2 bg-white dark:bg-muted/40 p-6 rounded-2xl shadow">
+      <div className="col-span-6 md:col-span-2 bg-white dark:bg-muted/40 p-6 rounded-2xl shadow">
         <h3 className="font-instrumental-serif font-semibold mb-2">Participate on smooth Quiz Experience 🧠</h3>
         <p className="text-sm text-muted-foreground">
           A clear and responsive interface with timers, answer formats, and question progress — works on every device
@@ -127,7 +127,7 @@ const StudentFlow = () => {
       </div>
 
       {/* Real-Time Feedback */}
-      <div className="col-span-3 bg-white dark:bg-muted/40 p-6 rounded-2xl shadow">
+      <div className="col-span-6 md:col-span-3 bg-white dark:bg-muted/40 p-6 rounded-2xl shadow">
         <h3 className="font-instrumental-serif font-semibold mb-2">Real-Time Feedback 🔄</h3>
         <p className="text-sm text-muted-foreground">
           See whether your answer was correct immediately (if enabled by your teacher) or after quiz submission. Learn
@@ -136,7 +136,7 @@ const StudentFlow = () => {
       </div>
 
       {/* Live Leaderboards */}
-      <div className="col-span-3 bg-white dark:bg-muted/40 p-6 rounded-2xl shadow">
+      <div className="col-span-6 md:col-span-3 bg-white dark:bg-muted/40 p-6 rounded-2xl shadow">
         <h3 className="font-instrumental-serif font-semibold mb-2">Live Leaderboards 🏆</h3>
         <p className="text-sm text-muted-foreground">
           Compete with classmates during live sessions and track your rank in real-time — boost motivation through
@@ -145,7 +145,7 @@ const StudentFlow = () => {
       </div>
 
       {/* Quiz History & Review */}
-      <div className="col-span-3 bg-white dark:bg-muted/40 p-6 rounded-2xl shadow">
+      <div className="col-span-6 md:col-span-3 bg-white dark:bg-muted/40 p-6 rounded-2xl shadow">
         <h3 className="font-instrumental-serif font-semibold mb-2">Quiz History & Review 📚</h3>
         <p className="text-sm text-muted-foreground">
           Revisit previous quizzes, scores, and answers. Reflect on past performance and focus on improvement.
@@ -153,7 +153,7 @@ const StudentFlow = () => {
       </div>
 
       {/* Simple & Secure */}
-      <div className="col-span-3 bg-white dark:bg-muted/40 p-6 rounded-2xl shadow">
+      <div className="col-span-6 md:col-span-3 bg-white dark:bg-muted/40 p-6 rounded-2xl shadow">
         <h3 className="font-instrumental-serif font-semibold mb-2">Simple & Secure 🔒</h3>
         <p className="text-sm text-muted-foreground">
           Join anonymously or with a student account. No spam, no tracking — just a safe, focused learning environment.

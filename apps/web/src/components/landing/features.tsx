@@ -7,7 +7,7 @@ const Features = () => {
   return (
     <section className="mt-20">
       <Container>
-        <Tabs defaultValue="educator" className="w-4/5 mx-auto space-y-10">
+        <Tabs defaultValue="educator" className="w-full md:w-4/5 mx-auto space-y-10">
           <div className="flex flex-col gap-2 items-center justify-between">
             <span className="text-3xl font-instrumental-serif font-bold">Features</span>
             <p className="text-sm">✨ One platform. Two experiences. One goal: Better learning.</p>
@@ -90,14 +90,14 @@ const containerVariant = {
 const EducatorFeature = () => {
   return (
     <motion.div
-      className="relative bg-secondary h-40 p-4 rounded-4xl mt-5 border"
+      className="relative bg-secondary h-fit md:h-40 p-4 rounded-4xl mt-5 border"
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true }}
     >
       <motion.div
         variants={containerVariant}
-        className="grid grid-cols-2 md:grid-cols-4 gap-4 absolute h-fit bottom-5 inset-x-4"
+        className="grid md:grid-cols-4 gap-4 md:absolute h-fit bottom-5 inset-x-4"
       >
         {educatorFeatures.map((el, i) => (
           <motion.div

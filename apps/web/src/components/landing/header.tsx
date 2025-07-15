@@ -70,10 +70,12 @@ const Header = () => {
           Watch Demo
           <PlayCircle />
         </Button>
-        <Button variant={"outline"}>
-          Login
-          <ArrowUpRight />
-        </Button>
+        <Link href={"/login"}>
+          <Button variant={"outline"}>
+            Login
+            <ArrowUpRight />
+          </Button>
+        </Link>
         <ThemeToggle />
       </div>
     </Container>
