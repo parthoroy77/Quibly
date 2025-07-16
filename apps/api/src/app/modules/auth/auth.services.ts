@@ -1,5 +1,5 @@
 import db from "@quibly/database";
-import { RefreshToken, Session, User } from "@quibly/database/client";
+import { RefreshToken, Session, User, UserRole } from "@quibly/database/client";
 import { parseTimeToDate } from "@quibly/utils/functions";
 import { StatusCodes } from "http-status-codes";
 import config from "../../config";
@@ -211,10 +211,35 @@ const getSession = async (payload: string): Promise<{ session: Session; user: Om
   };
 };
 
+const onboarding = async (role: UserRole, userId: string) => {
+  if (role === "admin") {
+    throw new ApiError(StatusCodes.FORBIDDEN, "Forbidden.");
+  }
+
+  const user = await db.user.findUnique({
+    where: {
+      id: userId,
+    },
+  });
+
+  if (!user) {
+    throw new ApiError(StatusCodes.NOT_FOUND, "User not found");
+  }
+
+  if (user.role) {
+    throw new ApiError(StatusCodes.CONFLICT, "User already onboarded");
+  }
+
+  await db.user.update({ data: { role }, where: { id: user.id } });
+
+  return;
+};
+
 export const AuthServices = {
   register,
   login,
   logout,
   refreshSession,
   getSession,
+  onboarding,
 };

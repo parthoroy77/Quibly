@@ -1,10 +1,9 @@
-import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { ApiResponse } from "../../handlers/ApiResponse";
 import asyncHandler from "../../handlers/asyncHandler";
 import { AuthServices } from "./auth.services";
 
-const userRegistration = asyncHandler(async (req: Request, res: Response) => {
+const userRegistration = asyncHandler(async (req, res) => {
   const payload = req.body;
 
   await AuthServices.register(payload);
@@ -17,7 +16,7 @@ const userRegistration = asyncHandler(async (req: Request, res: Response) => {
   });
 });
 
-const userLogin = asyncHandler(async (req: Request, res: Response) => {
+const userLogin = asyncHandler(async (req, res) => {
   const payload = req.body;
   const { session, refreshToken } = await AuthServices.login(payload);
 
@@ -50,7 +49,7 @@ const userLogin = asyncHandler(async (req: Request, res: Response) => {
   });
 });
 
-const userLogout = asyncHandler(async (req: Request, res: Response) => {
+const userLogout = asyncHandler(async (req, res) => {
   const { session_token } = req.cookies;
   const response = await AuthServices.logout({ userId: req.user.id!, sessionToken: session_token });
 
@@ -65,7 +64,7 @@ const userLogout = asyncHandler(async (req: Request, res: Response) => {
   });
 });
 
-const userSessionRefresh = asyncHandler(async (req: Request, res: Response) => {
+const userSessionRefresh = asyncHandler(async (req, res) => {
   const { refresh_token } = req.cookies;
   const { session, refreshToken } = await AuthServices.refreshSession(refresh_token);
   res.cookie("session_token", session.token, {
@@ -95,7 +94,7 @@ const userSessionRefresh = asyncHandler(async (req: Request, res: Response) => {
   });
 });
 
-const getUserSession = asyncHandler(async (req: Request, res: Response) => {
+const getUserSession = asyncHandler(async (req, res) => {
   ApiResponse(res, {
     data: {
       user: req.user,
@@ -105,10 +104,25 @@ const getUserSession = asyncHandler(async (req: Request, res: Response) => {
     statusCode: StatusCodes.OK,
   });
 });
+
+const userOnboarding = asyncHandler(async (req, res) => {
+  const { role } = req.body;
+
+  await AuthServices.onboarding(role, req.user.id!);
+
+  ApiResponse(res, {
+    data: {},
+    message: "User onboarding successfully.",
+    success: true,
+    statusCode: StatusCodes.OK,
+  });
+});
+
 export const AuthControllers = {
   userRegistration,
   userLogin,
   userLogout,
   userSessionRefresh,
+  userOnboarding,
   getUserSession,
 };
