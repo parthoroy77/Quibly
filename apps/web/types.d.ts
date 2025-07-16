@@ -1,4 +1,4 @@
-import { User as TUser } from "@repo/utils/types";
+import { User as TUser } from "@quibly/utils/types";
 import { DefaultUser } from "next-auth";
 declare module "next-auth" {
   /**

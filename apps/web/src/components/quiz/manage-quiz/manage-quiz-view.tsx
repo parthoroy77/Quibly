@@ -35,8 +35,6 @@ const ManageQuizView = ({ quiz }: { quiz: QuizWithQsn }) => {
   };
 
   useEffect(() => {
-    console.log(quiz);
-    console.log(processQuizDataToFormValues(quiz));
     form.setValue("questions", processQuizDataToFormValues(quiz));
   }, [quiz.questions]);
 

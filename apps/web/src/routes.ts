@@ -11,6 +11,12 @@ export const ROOT_ROUTE = "/";
 export const DEFAULT_LOGIN_REDIRECT = "/dashboard"; // will change it if needed
 
 /**
+ * The user onboarding path.
+ * @type {string}
+ */
+export const ONBOARDING_ROUTE = "/onboarding"; // will change it if needed
+
+/**
  * An array of routes those are accessible to the public
  * These routes do not require authentication
  * @type {string[]}

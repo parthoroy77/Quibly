@@ -2,6 +2,8 @@
 
 import { signIn } from "@/lib/auth";
 import { fetcher } from "@/lib/fetcher";
+import { serverFetcher } from "@/lib/server-fetcher";
+import { UserRole } from "@quibly/utils/types";
 import { LoginFormData, RegistrationFormData } from "@quibly/utils/validations";
 import { AuthError } from "next-auth";
 import { revalidateTag } from "next/cache";
@@ -41,4 +43,10 @@ export const userLogin = async (data: LoginFormData) => {
 
 export const revalidateOnServer = async (tag: string) => {
   revalidateTag(tag);
+};
+
+export const completeOnboarding = async (role: Omit<UserRole, "admin">) => {
+  const body = { role };
+  const response = await serverFetcher("/auth/onboarding", { method: "POST", body });
+  return response;
 };

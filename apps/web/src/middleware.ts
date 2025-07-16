@@ -1,7 +1,8 @@
 import { auth } from "./lib/auth";
-import { API_AUTH_PREFIX, AUTH_ROUTES, DEFAULT_LOGIN_REDIRECT, PUBLIC_ROUTES } from "./routes";
+import { API_AUTH_PREFIX, AUTH_ROUTES, DEFAULT_LOGIN_REDIRECT, ONBOARDING_ROUTE, PUBLIC_ROUTES } from "./routes";
 
 export default auth(async (req) => {
+  const session = req.auth;
   const isLoggedIn = !!req.auth;
 
   const { nextUrl } = req;
@@ -15,6 +16,12 @@ export default auth(async (req) => {
   // Check if it's an auth route
   const isAuthRoute = AUTH_ROUTES.includes(nextUrl.pathname);
 
+  // Check if it's an auth route
+  const isOnboardingRoute = ONBOARDING_ROUTE.startsWith(nextUrl.pathname);
+
+  // Check if user onboarding completed
+  const isOnboarded = !!session?.user.role;
+
   if (isApiAuthRoute) return null;
 
   if (isAuthRoute) {
@@ -22,6 +29,16 @@ export default auth(async (req) => {
       return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
     }
     return null;
+  }
+
+  if (isLoggedIn) {
+    if (!isOnboarded && !isOnboardingRoute) {
+      return Response.redirect(new URL(ONBOARDING_ROUTE, nextUrl));
+    }
+
+    if (isOnboarded && isOnboardingRoute) {
+      return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
+    }
   }
 
   if (!isLoggedIn && !isPublicRoute) {
