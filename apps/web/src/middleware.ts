@@ -1,5 +1,8 @@
-import { auth } from "./lib/auth";
+import NextAuth from "next-auth";
+import authConfig from "./lib/auth.config";
 import { API_AUTH_PREFIX, AUTH_ROUTES, DEFAULT_LOGIN_REDIRECT, ONBOARDING_ROUTE, PUBLIC_ROUTES } from "./routes";
+
+const { auth } = NextAuth(authConfig);
 
 export default auth(async (req) => {
   const session = req.auth;

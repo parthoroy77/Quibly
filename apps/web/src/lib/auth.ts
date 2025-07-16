@@ -1,13 +1,11 @@
 import { TLoginResponse, User } from "@quibly/utils/types";
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
+import nextAuthConfig from "./auth.config";
 import { fetcher } from "./fetcher";
 
 export const authConfig = NextAuth({
-  session: {
-    strategy: "jwt",
-    maxAge: 604800, // 7 days
-  },
+  ...nextAuthConfig,
   providers: [
     Credentials({
       credentials: {
@@ -105,9 +103,6 @@ export const authConfig = NextAuth({
         expires: new Date(token.sessionExpiresAt).toISOString(),
       };
     },
-  },
-  pages: {
-    signIn: "/login",
   },
 });
 
