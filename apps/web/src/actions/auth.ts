@@ -48,6 +48,9 @@ export const revalidateOnServer = async (tag: string) => {
 export const completeOnboarding = async (role: Omit<UserRole, "admin">) => {
   const body = { role };
   const response = await serverFetcher("/auth/onboarding", { method: "POST", body });
+  if (response.success) {
+    revalidateTag("auth");
+  }
   return response;
 };
 

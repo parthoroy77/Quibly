@@ -2,6 +2,7 @@
 import { completeOnboarding } from "@/actions/auth";
 import { AuroraText } from "@/components/shared/aurora-text";
 import Logo from "@/components/ui/logo";
+import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 import { Button } from "@quibly/ui/components/button";
 import { toast } from "@quibly/ui/components/sonner";
 import { cn } from "@quibly/ui/lib/utils";
@@ -21,10 +22,9 @@ const OnboardingPage = () => {
     startTransition(async () => {
       const toastId = toast.loading("Processing your request", { duration: 2000 });
       const response = await completeOnboarding(role);
-      console.log(response);
       if (response.success) {
         toast.success(response.message, { id: toastId });
-        router.push("/");
+        router.push(DEFAULT_LOGIN_REDIRECT);
       } else {
         toast.error(response.message, { id: toastId });
       }
