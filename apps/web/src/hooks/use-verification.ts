@@ -1,4 +1,5 @@
-import { fetcher } from "@/lib/fetcher";
+"use client";
+import { userAccountVerify } from "@/actions/auth";
 import { toast } from "@quibly/ui/components/sonner";
 import { useEffect, useState } from "react";
 
@@ -13,12 +14,7 @@ export const useVerification = (token: string) => {
       }
 
       setVerificationStatus("loading");
-      const response = await fetcher("/auth/verify-account", {
-        method: "POST",
-        body: { token },
-        cache: "no-cache",
-      });
-
+      const response = await userAccountVerify(token);
       if (response.success) {
         toast.success(response.message);
         setVerificationStatus("verified");

@@ -28,14 +28,14 @@ const VerifyView = ({ token }: { token: string }) => {
 };
 
 const LoadingState = () => (
-  <div className="mx-auto flex h-[320px] flex-col items-center justify-center gap-3 p-5 lg:w-[40%]">
+  <div className="mx-auto flex h-[320px] text-center flex-col items-center justify-center gap-3 p-5 lg:w-[40%]">
     <Loader size={26} className="animate-spin" />
     <span>Verifying Your Account</span>
   </div>
 );
 
 const VerifiedState = () => (
-  <div className="mx-auto flex h-[320px] flex-col items-center justify-center gap-3 p-5 lg:w-[40%]">
+  <div className="mx-auto flex h-[320px] flex-col text-center items-center justify-center gap-3 p-5 lg:w-[40%]">
     <BadgeCheck className=" size-[100px] rounded-full border p-4 bg-secondary" />
     <h3 className="text-xl font-medium">Your Account Now Verified!!</h3>
     <span className="text-accent-foreground text-sm">Now you can fully access our platform</span>
@@ -50,7 +50,7 @@ const VerifiedState = () => (
 const ErrorState = () => (
   <div className="mx-auto flex h-[320px] flex-col items-center justify-center gap-3 p-5 lg:w-[40%]">
     <OctagonAlert className="size-[70px] rounded-full border bg-red-600 p-2 text-white lg:size-[100px] lg:p-4" />
-    <h3 className="text-xl font-medium">Could not able to Verify Your Account!</h3>
+    <h3 className="text-xl text-center font-medium">Could not able to Verify Your Account!</h3>
   </div>
 );
 

@@ -3,9 +3,11 @@ import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 import { notFound, redirect } from "next/navigation";
 import VerifyView from "./components/verify-view";
 
-type SearchParams = Promise<{ token: string | undefined }>;
+type Props = {
+  searchParams: Promise<{ token: string }>;
+};
 
-const VerifyPage = async ({ searchParams }: { searchParams: SearchParams }) => {
+const VerifyPage = async ({ searchParams }: Props) => {
   const token = (await searchParams).token;
   const session = await auth();
 
@@ -19,7 +21,7 @@ const VerifyPage = async ({ searchParams }: { searchParams: SearchParams }) => {
 
   return (
     <section className="h-dvh w-full">
-      <VerifyView token={token} />
+      <VerifyView token={token as string} />
     </section>
   );
 };

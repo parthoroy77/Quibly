@@ -57,3 +57,7 @@ export const completeOnboarding = async (role: Omit<UserRole, "admin">) => {
 export const resendVerificationEmail = async (email: string) => {
   return await fetcher("/auth/resend-verification", { method: "POST", body: { email } });
 };
+
+export const userAccountVerify = async (token: string) => {
+  return await fetcher("/auth/verify-account", { method: "POST", body: { token } });
+};

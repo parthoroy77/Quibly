@@ -3,8 +3,12 @@ import { Inbox } from "lucide-react";
 import { redirect } from "next/navigation";
 import SendNewEmail from "./components/send-new-email";
 
-const VerificationRequestPage = async ({ searchParams }: { searchParams: { email: string } }) => {
-  const email = searchParams.email;
+type Props = {
+  searchParams: Promise<{ email: string }>;
+};
+
+const VerificationRequestPage = async ({ searchParams }: Props) => {
+  const email = (await searchParams).email;
   if (!email) {
     redirect("/register");
   }
