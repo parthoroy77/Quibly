@@ -11,11 +11,13 @@ import { Input } from "@quibly/ui/components/input";
 import { toast } from "@quibly/ui/components/sonner";
 import { useForm, zodResolver } from "@quibly/utils/hook-form";
 import { RegistrationFormData, registrationSchema } from "@quibly/utils/validations";
+import { useRouter } from "next/navigation";
 import AuthFormWrapper from "../components/auth-form-wrapper";
 
 const SignupPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, startTransition] = useTransition();
+  const router = useRouter();
 
   const form = useForm<RegistrationFormData>({
     resolver: zodResolver(registrationSchema),
@@ -26,15 +28,14 @@ const SignupPage = () => {
     },
   });
 
-  const onSubmit = async (data: RegistrationFormData) => {
+  const onSubmit = async (values: RegistrationFormData) => {
     const toastId = toast.loading("Processing your request", { duration: 2000 });
     startTransition(async () => {
-      const response = await userRegistration(data);
+      const response = await userRegistration(values);
       if (response.success) {
         toast.success(response.message, { id: toastId });
-        // TODO: Redirect to verify account page
-        // router.push(`/verification-request?email=${data.email}`);
-        // form.reset({ email: "", fullName: "", password: "" });
+        router.push(`/verification-request?email=${values.email}`);
+        form.reset({ email: "", fullName: "", password: "" });
       } else {
         toast.error(response.message, { id: toastId });
       }

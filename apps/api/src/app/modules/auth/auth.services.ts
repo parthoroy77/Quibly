@@ -267,25 +267,29 @@ const verifyAccount = async (payload: string) => {
 
 // Resend account verification email
 const resendVerificationEmail = async (email: string): Promise<void> => {
-  const isUserExists = await db.user.findUnique({
+  const user = await db.user.findUnique({
     where: {
       email: email,
       status: "inactive",
-      emailVerified: false,
     },
     select: {
       id: true,
-      role: true,
+      status: true,
+      emailVerified: true,
     },
   });
 
-  if (!isUserExists) {
-    throw new ApiError(StatusCodes.CONFLICT, "User doesn't exists or already verified");
+  if (!user) {
+    throw new ApiError(StatusCodes.CONFLICT, "User doesn't exist, is not inactive, or is already verified");
+  }
+
+  if (user.emailVerified) {
+    throw new ApiError(StatusCodes.CONFLICT, "Email is already verified");
   }
 
   // send verification email
   // Handle this task using queues
-  sendVerificationEmail(email, isUserExists.id);
+  sendVerificationEmail(email, user.id);
 
   return;
 };

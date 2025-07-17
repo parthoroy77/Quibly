@@ -50,3 +50,7 @@ export const completeOnboarding = async (role: Omit<UserRole, "admin">) => {
   const response = await serverFetcher("/auth/onboarding", { method: "POST", body });
   return response;
 };
+
+export const resendVerificationEmail = async (email: string) => {
+  return await fetcher("/auth/resend-verification", { method: "POST", body: { email } });
+};
