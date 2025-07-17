@@ -41,8 +41,8 @@ const register = async (payload: TRegistrationPayload): Promise<void> => {
   }
 
   // Send verification email
-  await sendVerificationEmail(newUser.email, newUser.id);
   if (config.NODE_ENV === "production") {
+    sendVerificationEmail(newUser.email, newUser.id);
   }
 
   return;
@@ -246,6 +246,50 @@ const onboarding = async (role: UserRole, userId: string) => {
   return;
 };
 
+const verifyAccount = async (payload: string) => {
+  const decoded = (await verifyToken(payload, config.jwt_access_secret as string)) as { userId: string };
+
+  if (!decoded) {
+    throw new ApiError(StatusCodes.NOT_FOUND, "Invalid or expired verification token.");
+  }
+
+  await db.user.update({
+    where: { id: decoded.userId },
+    data: {
+      emailVerified: true,
+      status: "active",
+    },
+  });
+
+  // TODO: after verification sent a welcome email
+  return;
+};
+
+// Resend account verification email
+const resendVerificationEmail = async (email: string): Promise<void> => {
+  const isUserExists = await db.user.findUnique({
+    where: {
+      email: email,
+      status: "inactive",
+      emailVerified: false,
+    },
+    select: {
+      id: true,
+      role: true,
+    },
+  });
+
+  if (!isUserExists) {
+    throw new ApiError(StatusCodes.CONFLICT, "User doesn't exists or already verified");
+  }
+
+  // send verification email
+  // Handle this task using queues
+  sendVerificationEmail(email, isUserExists.id);
+
+  return;
+};
+
 export const AuthServices = {
   register,
   login,
@@ -253,4 +297,6 @@ export const AuthServices = {
   refreshSession,
   getSession,
   onboarding,
+  resendVerificationEmail,
+  verifyAccount,
 };

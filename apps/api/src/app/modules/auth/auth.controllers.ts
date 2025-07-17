@@ -118,6 +118,28 @@ const userOnboarding = asyncHandler(async (req, res) => {
   });
 });
 
+const userAccountVerify = asyncHandler(async (req, res) => {
+  const { token } = req.body;
+  await AuthServices.verifyAccount(token);
+  ApiResponse(res, {
+    data: {},
+    message: "Your account has been verified.",
+    success: true,
+    statusCode: StatusCodes.OK,
+  });
+});
+
+const resendUserVerificationEmail = asyncHandler(async (req, res) => {
+  const { email } = req.body;
+  await AuthServices.resendVerificationEmail(email);
+  ApiResponse(res, {
+    data: {},
+    message: "New verification email has been sent. Check your email.",
+    success: true,
+    statusCode: StatusCodes.OK,
+  });
+});
+
 export const AuthControllers = {
   userRegistration,
   userLogin,
@@ -125,4 +147,6 @@ export const AuthControllers = {
   userSessionRefresh,
   userOnboarding,
   getUserSession,
+  resendUserVerificationEmail,
+  userAccountVerify,
 };

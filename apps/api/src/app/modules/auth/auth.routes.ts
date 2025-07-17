@@ -3,21 +3,29 @@ import { Router } from "express";
 import zodSafeParse, { zodCookieParse } from "../../handlers/zodSafeParse";
 import authMiddleware from "../../middleware/auth.middleware";
 import { AuthControllers } from "./auth.controllers";
-import { sessionRefreshSchema } from "./auth.schema";
+import { resendVerificationEmailSchema, sessionRefreshSchema, verifyAccountSchema } from "./auth.schema";
 
-const AuthRoutes = Router();
+const router = Router();
 
-AuthRoutes.post("/registration", zodSafeParse(registrationSchema), AuthControllers.userRegistration);
-AuthRoutes.post("/login", zodSafeParse(loginSchema), AuthControllers.userLogin);
-AuthRoutes.post("/logout", authMiddleware(), AuthControllers.userLogout);
-AuthRoutes.post(
+router.post("/registration", zodSafeParse(registrationSchema), AuthControllers.userRegistration);
+router.post("/login", zodSafeParse(loginSchema), AuthControllers.userLogin);
+router.post("/logout", authMiddleware(), AuthControllers.userLogout);
+router.post(
   "/onboarding",
   authMiddleware(),
   zodSafeParse(z.object({ role: z.enum(["educator", "student"]) })),
   AuthControllers.userOnboarding
 );
+router.post(
+  "/resend-verification",
+  zodSafeParse(resendVerificationEmailSchema),
+  AuthControllers.resendUserVerificationEmail
+);
+router.post("/verify-account", zodSafeParse(verifyAccountSchema), AuthControllers.userAccountVerify);
 
-AuthRoutes.post("/refresh-session", zodCookieParse(sessionRefreshSchema), AuthControllers.userSessionRefresh);
-AuthRoutes.get("/me", authMiddleware(), AuthControllers.getUserSession);
+router.post("/refresh-session", zodCookieParse(sessionRefreshSchema), AuthControllers.userSessionRefresh);
+router.get("/me", authMiddleware(), AuthControllers.getUserSession);
+
+const AuthRoutes = router;
 
 export default AuthRoutes;
