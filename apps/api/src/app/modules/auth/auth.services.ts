@@ -5,7 +5,13 @@ import { StatusCodes } from "http-status-codes";
 import config from "../../config";
 import { ApiError } from "../../handlers/ApiError";
 import { TLoginPayload, TLogoutPayload, TRegistrationPayload } from "./auth.types";
-import { comparePassword, generateSessionAndRefreshToken, hashPassword, verifyToken } from "./auth.utils";
+import {
+  comparePassword,
+  generateSessionAndRefreshToken,
+  hashPassword,
+  sendVerificationEmail,
+  verifyToken,
+} from "./auth.utils";
 
 // registration
 const register = async (payload: TRegistrationPayload): Promise<void> => {
@@ -32,6 +38,11 @@ const register = async (payload: TRegistrationPayload): Promise<void> => {
 
   if (!newUser) {
     throw new ApiError(StatusCodes.INTERNAL_SERVER_ERROR, "Registration failed");
+  }
+
+  // Send verification email
+  await sendVerificationEmail(newUser.email, newUser.id);
+  if (config.NODE_ENV === "production") {
   }
 
   return;

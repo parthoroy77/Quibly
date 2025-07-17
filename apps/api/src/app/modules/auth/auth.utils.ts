@@ -3,6 +3,8 @@ import { StatusCodes } from "http-status-codes";
 import { importJWK, JWTPayload, jwtVerify, SignJWT } from "jose";
 import config from "../../config";
 import { ApiError } from "../../handlers/ApiError";
+import { sendEmail } from "../../services/email";
+import { VerificationEmailTemplate } from "../../services/email/templates/auth-template";
 
 const hashPassword = async (password: string) => {
   try {
@@ -68,4 +70,21 @@ const verifyToken = async (token: string, secret: string): Promise<JWTPayload | 
   }
 };
 
-export { comparePassword, generateSessionAndRefreshToken, generateToken, hashPassword, verifyToken };
+const sendVerificationEmail = async (email: string, userId: string) => {
+  // generate verification token
+  const token = await generateToken({ userId }, config.jwt_access_secret as string, "1h");
+  // Verification email template
+  const link = `${config.web_domain_url}/verify?token=${token}`;
+  const html = VerificationEmailTemplate(link);
+  // send mail
+  await sendEmail(email, "Verify Your Account - Quibly", html);
+};
+
+export {
+  comparePassword,
+  generateSessionAndRefreshToken,
+  generateToken,
+  hashPassword,
+  sendVerificationEmail,
+  verifyToken,
+};
