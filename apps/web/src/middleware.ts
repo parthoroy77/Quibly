@@ -17,7 +17,7 @@ export default auth(async (req) => {
   const isAuthRoute = AUTH_ROUTES.includes(nextUrl.pathname);
 
   // Check if it's an auth route
-  const isOnboardingRoute = ONBOARDING_ROUTE.startsWith(nextUrl.pathname);
+  const isOnboardingRoute = ONBOARDING_ROUTE === nextUrl.pathname;
 
   // Check if user onboarding completed
   const isOnboarded = !!session?.user.role;
@@ -31,6 +31,12 @@ export default auth(async (req) => {
     return null;
   }
 
+  if (!isLoggedIn && !isPublicRoute) {
+    return Response.redirect(new URL("/login", nextUrl));
+  }
+
+  console.log(nextUrl.pathname);
+  console.log(isOnboarded, isOnboardingRoute);
   if (isLoggedIn) {
     if (!isOnboarded && !isOnboardingRoute) {
       return Response.redirect(new URL(ONBOARDING_ROUTE, nextUrl));
@@ -39,10 +45,6 @@ export default auth(async (req) => {
     if (isOnboarded && isOnboardingRoute) {
       return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
     }
-  }
-
-  if (!isLoggedIn && !isPublicRoute) {
-    return Response.redirect(new URL("/login", nextUrl));
   }
 
   return null;

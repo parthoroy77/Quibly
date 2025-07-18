@@ -8,7 +8,6 @@ import {
 import { Quiz } from "@quibly/utils/types";
 import { formatDistanceToNow } from "date-fns";
 import {
-  ChartNoAxesGantt,
   CircleFadingPlus,
   Copy,
   Ellipsis,
@@ -18,6 +17,7 @@ import {
   Settings2,
   Waypoints,
 } from "lucide-react";
+import Link from "next/link";
 import { FC } from "react";
 
 interface Props {
@@ -25,11 +25,14 @@ interface Props {
 }
 const QuizCard: FC<Props> = ({ quiz }) => {
   const { title, description, updatedAt, questionCount, totalPoints, estimateTime } = quiz;
+  const redirectLink = "/manage-quiz/" + quiz.id;
   return (
     <div className="rounded-xl bg-sidebar relative border shadow-sm p-2 space-y-2 flex flex-col justify-between">
-      <div className="h-24 bg-red-200 rounded-lg" />
-      <h2 className="font-semibold line-clamp-1 font-instrumental-sans tracking-wide">{title}</h2>
-      <p className="line-clamp-2 text-xs font-medium text-muted-foreground">{description}</p>
+      <Link href={redirectLink} className="space-y-2 ">
+        <div className="h-24 bg-red-200 rounded-lg" />
+        <h2 className="font-semibold line-clamp-1 font-instrumental-sans tracking-wide">{title}</h2>
+        <p className="line-clamp-2 text-xs font-medium text-muted-foreground">{description}</p>
+      </Link>
       <div className="font-medium flex justify-between gap-2">
         <div className="text-xs inline-flex gap-1 items-center">
           <FileQuestion size={14} />
@@ -61,17 +64,15 @@ const QuizCard: FC<Props> = ({ quiz }) => {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="flex flex-col items-start gap-1 *:w-full">
+              <Link href={redirectLink}>
+                <DropdownMenuItem>
+                  <Settings />
+                  <span>Manage</span>
+                </DropdownMenuItem>
+              </Link>
               <DropdownMenuItem>
                 <Copy />
                 <span>Duplicate</span>
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <ChartNoAxesGantt />
-                <span>View </span>
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Settings />
-                <span>Edit</span>
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <ScrollText />

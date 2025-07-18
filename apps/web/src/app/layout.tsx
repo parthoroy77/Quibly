@@ -44,7 +44,7 @@ export default function RootLayout({
           fontInstrumentalSans.variable,
           "font-sans",
           "antialiased",
-          "scrollbar-hidden"
+          "scrollbar-hidden overflow-hidden"
         )}
       >
         <Providers>{children}</Providers>

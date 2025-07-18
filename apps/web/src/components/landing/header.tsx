@@ -1,11 +1,14 @@
 "use client";
 import Logo from "@/components/ui/logo";
+import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 import { Button } from "@quibly/ui/components/button";
 import { Container } from "@quibly/ui/components/container";
 import { Separator } from "@quibly/ui/components/separator";
+import { Skeleton } from "@quibly/ui/components/skeleton";
 import { cn } from "@quibly/ui/lib/utils";
-import { ArrowUpRight, Menu, PlayCircle, X } from "lucide-react";
+import { ArrowUpRight, LayoutDashboard, Menu, PlayCircle, X } from "lucide-react";
 import { useMotionValueEvent, useScroll } from "motion/react";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useState } from "react";
 import ThemeToggle from "../ui/theme-toggle";
@@ -20,6 +23,7 @@ export const navItems = [
 ];
 
 const Header = () => {
+  const { status } = useSession();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -54,12 +58,23 @@ const Header = () => {
             Watch Demo
             <PlayCircle />
           </Button>
-          <Link href={"/login"}>
-            <Button variant={"outline"}>
-              Login
-              <ArrowUpRight />
-            </Button>
-          </Link>
+          {status === "loading" ? (
+            <Skeleton className="w-28 h-8" />
+          ) : status === "authenticated" ? (
+            <Link href={DEFAULT_LOGIN_REDIRECT}>
+              <Button variant={"secondary"}>
+                <LayoutDashboard />
+                Dashboard
+              </Button>
+            </Link>
+          ) : (
+            <Link href={"/login"}>
+              <Button variant={"outline"}>
+                Login
+                <ArrowUpRight />
+              </Button>
+            </Link>
+          )}
           <div className="hidden sm:block">
             <ThemeToggle />
           </div>
