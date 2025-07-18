@@ -1,6 +1,7 @@
 "use client";
 
 import { userLogin } from "@/actions/auth";
+import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 import { Button } from "@quibly/ui/components/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@quibly/ui/components/form";
 import { Input } from "@quibly/ui/components/input";
@@ -32,7 +33,7 @@ const LoginPage = () => {
       const response = await userLogin(data);
       if (response.success) {
         toast.success(response.message, { id: toastId });
-        router.push("/");
+        router.push(DEFAULT_LOGIN_REDIRECT);
         form.reset();
       } else {
         toast.error(response.message, { id: toastId });

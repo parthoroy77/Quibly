@@ -1,6 +1,6 @@
 "use server";
 
-import { signIn } from "@/lib/auth";
+import { signIn, signOut } from "@/lib/auth";
 import { fetcher } from "@/lib/fetcher";
 import { serverFetcher } from "@/lib/server-fetcher";
 import { UserRole } from "@quibly/utils/types";
@@ -60,4 +60,11 @@ export const resendVerificationEmail = async (email: string) => {
 
 export const userAccountVerify = async (token: string) => {
   return await fetcher("/auth/verify-account", { method: "POST", body: { token } });
+};
+
+export const userLogout = async () => {
+  await signOut({
+    redirectTo: "/",
+    redirect: true,
+  });
 };
