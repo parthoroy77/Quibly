@@ -68,10 +68,22 @@ const batchQuizQuestions = asyncHandler(async (req, res) => {
   });
 });
 
+const generateQuizQuestionsFromAI = asyncHandler(async (req, res) => {
+  const payload = req.body;
+  const result = await QuizServices.generateQuestions(payload);
+  ApiResponse(res, {
+    data: result,
+    message: "Questions handled successfully",
+    success: true,
+    statusCode: StatusCodes.OK,
+  });
+});
+
 export const QuizControllers = {
   createQuiz,
   getAllQuiz,
   getAllQuizByUserId,
   getQuizWithQuestion,
   batchQuizQuestions,
+  generateQuizQuestionsFromAI,
 };

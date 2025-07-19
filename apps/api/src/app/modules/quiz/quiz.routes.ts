@@ -1,5 +1,5 @@
 import { UserRole } from "@quibly/database/client";
-import { QuestionSchema, z } from "@quibly/utils/validations";
+import { GenerateQuestionValidationSchema, QuestionSchema, z } from "@quibly/utils/validations";
 import { Router } from "express";
 import zodSafeParse from "../../handlers/zodSafeParse";
 import authMiddleware from "../../middleware/auth.middleware";
@@ -22,6 +22,12 @@ router.post(
     })
   ),
   QuizControllers.batchQuizQuestions
+);
+router.post(
+  "/questions/generate",
+  authMiddleware(UserRole.educator),
+  zodSafeParse(GenerateQuestionValidationSchema),
+  QuizControllers.generateQuizQuestionsFromAI
 );
 
 const QuizRoutes = router;

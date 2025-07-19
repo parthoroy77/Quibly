@@ -17,6 +17,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@google/genai": "^1.10.0",
     "@quibly/database": "workspace:*",
     "@quibly/utils": "workspace:*",
     "@types/multer": "^2.0.0",

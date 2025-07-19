@@ -18,4 +18,8 @@ export default {
   jwt_refresh_token_expires_in: process.env.JWT_REFRESH_TOKEN_EXPIRES_IN as string,
 
   resend_api_key: process.env.RESEND_API_KEY as string,
+
+  // gemini api keys
+  gemini_api_key: process.env.GEMINI_API_KEY as string,
+  gemini_api_model: process.env.GEMINI_API_MODEL as string,
 };
