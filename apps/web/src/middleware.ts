@@ -35,8 +35,6 @@ export default auth(async (req) => {
     return Response.redirect(new URL("/login", nextUrl));
   }
 
-  console.log(nextUrl.pathname);
-  console.log(isOnboarded, isOnboardingRoute);
   if (isLoggedIn) {
     if (!isOnboarded && !isOnboardingRoute) {
       return Response.redirect(new URL(ONBOARDING_ROUTE, nextUrl));

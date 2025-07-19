@@ -15,7 +15,7 @@ import { toNormalCase } from "@quibly/utils/functions";
 import { useFieldArray, UseFormReturn } from "@quibly/utils/hook-form";
 import { QuestionType } from "@quibly/utils/types";
 import { CreateQuestionFormData } from "@quibly/utils/validations";
-import { FileQuestion, GripVertical, Plus, SaveAll, Sparkles, Trash2 } from "lucide-react";
+import { FileQuestion, GripVertical, Plus, SaveAll, Trash2 } from "lucide-react";
 import { FC, RefObject, useState, useTransition } from "react";
 
 interface Props {
@@ -71,10 +71,6 @@ const QuestionBuilderForm: FC<Props> = ({ form, containerRef, questionRefs, sele
         ref={containerRef}
       >
         <div className="flex justify-end gap-3">
-          <Button type="button" variant={"secondary"}>
-            Generate from AI
-            <Sparkles />
-          </Button>
           {!!questions.length && (
             <Button disabled={isPending} type="submit" variant={"default"}>
               <SaveAll />
