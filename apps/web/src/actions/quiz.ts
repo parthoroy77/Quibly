@@ -1,7 +1,7 @@
 "use server";
 import { serverFetcher } from "@/lib/server-fetcher";
 import { Quiz, QuizWithQsn } from "@quibly/utils/types";
-import { CreateQuizFormData } from "@quibly/utils/validations";
+import { CreateQuestionFormData, CreateQuizFormData, GenerateQuestionFormData } from "@quibly/utils/validations";
 import { revalidateTag } from "next/cache";
 
 export const createQuiz = async (data: CreateQuizFormData) => {
@@ -30,5 +30,13 @@ export const batchQuestions = async (data: unknown, quizId: string) => {
   if (result.success) {
     revalidateTag("quiz");
   }
+  return result;
+};
+
+export const generateQuestions = async (data: GenerateQuestionFormData) => {
+  const result = await serverFetcher<CreateQuestionFormData["questions"]>("/quizzes/questions/generate", {
+    method: "POST",
+    body: data,
+  });
   return result;
 };

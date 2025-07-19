@@ -1,4 +1,5 @@
 "use client";
+import { generateQuestions } from "@/actions/quiz";
 import { AuroraText } from "@/components/shared/aurora-text";
 import { Button } from "@quibly/ui/components/button";
 import {
@@ -23,6 +24,7 @@ import { Label } from "@quibly/ui/components/label";
 import { RadioGroup, RadioGroupItem } from "@quibly/ui/components/radio-group";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@quibly/ui/components/select";
 import { Slider } from "@quibly/ui/components/slider";
+import { toast } from "@quibly/ui/components/sonner";
 import { Textarea } from "@quibly/ui/components/textarea";
 import { cn } from "@quibly/ui/lib/utils";
 import { useForm, zodResolver } from "@quibly/utils/hook-form";
@@ -60,14 +62,18 @@ const GenerateQuestionModalForm = () => {
   const onSubmit = async (data: GenerateQuestionFormData) => {
     setIsGenerating(true);
     try {
-      // Handle form submission here
-      console.log("Form data:", data);
-      // Add your API call here
-      await new Promise((resolve) => setTimeout(resolve, 2000)); // Simulate API call
-      setOpen(false);
-      form.reset();
+      const response = await generateQuestions(data);
+      if (response.success) {
+        toast.success(response.message);
+        // TODO: Insert values into form
+        // setOpen(false);
+        // form.reset();
+      } else {
+        toast.error(response.message);
+      }
     } catch (error) {
-      console.error("Error generating questions:", error);
+      toast.error("Failed to generate question try again later");
+      setOpen(false);
     } finally {
       setIsGenerating(false);
     }

@@ -73,7 +73,7 @@ const generateQuizQuestionsFromAI = asyncHandler(async (req, res) => {
   const result = await QuizServices.generateQuestions(payload);
   ApiResponse(res, {
     data: result,
-    message: "Questions handled successfully",
+    message: "Questions generated successfully",
     success: true,
     statusCode: StatusCodes.OK,
   });
