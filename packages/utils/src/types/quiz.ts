@@ -7,6 +7,7 @@ type QuestionWithOptions = Question & {
       correctMultiSelectOptions: CorrectMultiSelectOption[];
     }
   >;
+  correctAnswer: CorrectAnswer;
 };
 
 export type QuizWithQsn = Quiz & {

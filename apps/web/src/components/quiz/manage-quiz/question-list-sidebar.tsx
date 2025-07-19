@@ -45,36 +45,38 @@ const QuestionListSidebar: FC<Props> = ({ form, onQsnSelect, selected }) => {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-      {questions.map((q, i) => (
-        <div
-          className={cn(
-            "p-4 rounded-xl border bg-background space-y-3 cursor-pointer",
-            selected === i && "border-primary"
-          )}
-          key={i}
-          onClick={() => onQsnSelect(i)}
-        >
-          <div className="flex items-center gap-2 ">
-            <span className="font-instrumental-sans bg-secondary font-bold size-6 text-sm flex items-center justify-center rounded-full border shrink-0">
-              {i + 1}
-            </span>
-            <h4 className={cn("truncate font-medium", !q.text && "text-muted-foreground")}>{q.text || "Untitled"}</h4>
-          </div>
-          <div className="flex items-center gap-2 text-xs font-medium flex-wrap">
-            <span className="p-2 text-xs max-w-32 font-medium py-0.5 bg-secondary capitalize truncate rounded-md border">
-              {toNormalCase(q.type)}
-            </span>
-            <div className="text-xs inline-flex gap-1 items-center">
-              <Sheet size={14} />
-              <span>{q.points} pts</span>
+      {questions
+        .filter((q) => q.mode !== "delete")
+        .map((q, i) => (
+          <div
+            className={cn(
+              "p-4 rounded-xl border bg-background space-y-3 cursor-pointer",
+              selected === i && "border-primary"
+            )}
+            key={i}
+            onClick={() => onQsnSelect(i)}
+          >
+            <div className="flex items-center gap-2 ">
+              <span className="font-instrumental-sans bg-secondary font-bold size-6 text-sm flex items-center justify-center rounded-full border shrink-0">
+                {i + 1}
+              </span>
+              <h4 className={cn("truncate font-medium", !q.text && "text-muted-foreground")}>{q.text || "Untitled"}</h4>
             </div>
-            <div className="text-xs inline-flex gap-1 items-center">
-              <Clock size={14} />
-              <span>{q.timeLimit} min</span>
+            <div className="flex items-center gap-2 text-xs font-medium flex-wrap">
+              <span className="p-2 text-xs max-w-32 font-medium py-0.5 bg-secondary capitalize truncate rounded-md border">
+                {toNormalCase(q.type)}
+              </span>
+              <div className="text-xs inline-flex gap-1 items-center">
+                <Sheet size={14} />
+                <span>{q.points} pts</span>
+              </div>
+              <div className="text-xs inline-flex gap-1 items-center">
+                <Clock size={14} />
+                <span>{q.timeLimit} min</span>
+              </div>
             </div>
           </div>
-        </div>
-      ))}
+        ))}
     </aside>
   );
 };

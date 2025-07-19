@@ -89,20 +89,32 @@ export const processQuizDataToFormValues = (quiz: QuizWithQsn): CreateQuestionFo
     explanation: q.explanation ?? "",
     mode: "update",
     questionId: q.id,
-    options: q.options.map((o) => ({
-      optionId: o.id,
-      index: o.index,
-      text: o.text ?? "",
-      isCorrect:
-        q.type === "multiple_choice_single"
-          ? o.correctAnswer.some((el) => el.optionId === o.id)
-          : q.type === "multiple_choice_multi"
-            ? o.correctMultiSelectOptions.some((el) => el.optionId === o.id)
-            : q.type === "true_false"
-              ? o.correctAnswer.some((el) => el.optionId === o.id)
-              : false,
-      correctAnswer: q.type === "short_answer" ? (o.correctAnswer[0]!.textAnswer as string | undefined) : undefined,
-      mode: "update",
-    })),
+    options:
+      q.type === "short_answer"
+        ? [
+            {
+              index: 0,
+              correctAnswer: q.type === "short_answer" ? q.correctAnswer.textAnswer! : undefined,
+              isCorrect: true,
+              text: "Demo Text Answer",
+              mode: "update",
+              correctAnswerId: q.correctAnswer.id,
+            },
+          ]
+        : q.options.map((o) => ({
+            optionId: o.id,
+            index: o.index,
+            text: o.text ?? "",
+            isCorrect:
+              q.type === "multiple_choice_single"
+                ? o.correctAnswer.some((el) => el.optionId === o.id)
+                : q.type === "multiple_choice_multi"
+                  ? o.correctMultiSelectOptions.some((el) => el.optionId === o.id)
+                  : q.type === "true_false"
+                    ? o.correctAnswer.some((el) => el.optionId === o.id)
+                    : false,
+            correctAnswer: "",
+            mode: "update",
+          })),
   }));
 };

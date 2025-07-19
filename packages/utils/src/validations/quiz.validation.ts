@@ -13,10 +13,7 @@ export type CreateQuizFormData = z.infer<typeof CreateQuizSchema>;
 
 const QuestionOptionSchema = z.object({
   optionId: z.string().optional(),
-  text: z
-    .string()
-    .min(4, "Option must be at least 5 characters long")
-    .max(100, "Option must not exceed 100 characters"),
+  text: z.string().max(100, "Option must not exceed 100 characters"),
   index: z.number(),
   isCorrect: z.boolean(),
   correctAnswer: z.string().optional(), // This is to determine the correct answer for Short Answer
@@ -64,6 +61,19 @@ export const QuestionSchema = z
           });
         });
       }
+
+      options.forEach((option, index) => {
+        if (!option.text || option.text.trim().length < 4) {
+          ctx.addIssue({
+            path: ["options", index, "text"],
+            code: z.ZodIssueCode.too_small,
+            type: "string",
+            inclusive: true,
+            minimum: 4,
+            message: "Option text must be at least 4 characters long.",
+          });
+        }
+      });
     }
 
     if (type === QuestionType.short_answer) {

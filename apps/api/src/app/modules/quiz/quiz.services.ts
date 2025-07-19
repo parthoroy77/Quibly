@@ -81,6 +81,7 @@ const getWithQuestions = async (id: string) => {
               correctMultiSelectOptions: true,
             },
           },
+          correctAnswer: true,
         },
       },
     },
@@ -201,11 +202,11 @@ const batchQuestions = async ({ quizId, create, update, remove }: BatchQuizQuest
           });
         }
         if (q.options.length > 0) {
+          await tx.correctAnswer.deleteMany({ where: { questionId: dbQsn.id } });
+          await tx.correctMultiSelectOption.deleteMany({ where: { questionId: dbQsn.id } });
           await tx.questionOption.deleteMany({
             where: { questionId: dbQsn.id },
           });
-          await tx.correctAnswer.deleteMany({ where: { questionId: dbQsn.id } });
-          await tx.correctMultiSelectOption.deleteMany({ where: { questionId: dbQsn.id } });
 
           if (q.type !== "short_answer") {
             for (const o of q.options) {

@@ -51,7 +51,7 @@ const QuestionBuilderForm: FC<Props> = ({ form, containerRef, questionRefs, sele
   const onSubmit = async (values: CreateQuestionFormData) => {
     const toastId = toast.loading("Processing your request", { duration: 2000 });
     const create = values.questions.filter((q) => q.mode === "create");
-    const update = values.questions.filter((q) => q.mode === "delete");
+    const update = values.questions.filter((q) => q.mode === "update");
     const remove = values.questions.filter((q) => q.mode === "delete").map((q) => q.questionId);
     startTransition(async () => {
       const result = await batchQuestions({ create, update, remove }, values.quizId);
@@ -63,6 +63,17 @@ const QuestionBuilderForm: FC<Props> = ({ form, containerRef, questionRefs, sele
     });
   };
 
+  // Filter out deleted questions and create a mapping for proper indexing
+  const visibleQuestions = questions.filter((q) => q.mode !== "delete");
+  const questionIndexMap = new Map();
+  let visibleIndex = 0;
+  questions.forEach((q, originalIndex) => {
+    if (q.mode !== "delete") {
+      questionIndexMap.set(originalIndex, visibleIndex);
+      visibleIndex++;
+    }
+  });
+
   return (
     <Form {...form}>
       <form
@@ -71,32 +82,37 @@ const QuestionBuilderForm: FC<Props> = ({ form, containerRef, questionRefs, sele
         ref={containerRef}
       >
         <div className="flex justify-end gap-3">
-          {!!questions.length && (
+          {!!visibleQuestions.length && (
             <Button disabled={isPending} type="submit" variant={"default"}>
               <SaveAll />
               {isPending ? "...Saving" : "Save"}
             </Button>
           )}
         </div>
-        {questions
-          .filter((q) => q.mode !== "delete")
-          .map((_, i) => (
+        {visibleQuestions.map((q, visibleIdx) => {
+          // Find the original index in the questions array
+          const originalIndex = questions.findIndex((question) => question.id === q.id);
+
+          return (
             <QuestionCard
-              key={i}
+              key={`${q.id}-${visibleIdx}`} // Use a combination of id and visible index
               form={form}
-              questionIndex={i}
-              removeQuestion={() => removeQsn(i)}
+              questionIndex={originalIndex} // Use original index for form field names
+              displayIndex={visibleIdx} // Use visible index for display
+              removeQuestion={() => removeQsn(originalIndex)}
               questionRefs={questionRefs}
               selected={selected}
             />
-          ))}
+          );
+        })}
       </form>
     </Form>
   );
 };
 
 interface CardProps {
-  questionIndex: number;
+  questionIndex: number; // Original index in the form array
+  displayIndex: number; // Index for display purposes
   form: Props["form"];
   removeQuestion: () => void;
   questionRefs: RefObject<{
@@ -104,7 +120,8 @@ interface CardProps {
   }>;
   selected: number;
 }
-const QuestionCard: FC<CardProps> = ({ questionIndex, questionRefs, form, removeQuestion, selected }) => {
+
+const QuestionCard: FC<CardProps> = ({ questionIndex, displayIndex, questionRefs, form, removeQuestion, selected }) => {
   const [media, setMedia] = useState(false);
   const {
     append: appendOption,
@@ -167,17 +184,17 @@ const QuestionCard: FC<CardProps> = ({ questionIndex, questionRefs, form, remove
   return (
     <div
       ref={(el) => {
-        questionRefs.current[questionIndex] = el;
+        questionRefs.current[displayIndex] = el; // Use display index for refs
       }}
       className={cn(
         "border *:p-3 divide-y rounded-xl w-full h-fit [&_input]:bg-sidebar [&_textarea]:bg-sidebar",
-        selected === questionIndex && "border-accent shadow-sm"
+        selected === displayIndex && "border-accent shadow-sm" // Use display index for selection
       )}
     >
       <div className="flex items-center justify-between ">
         <div className="flex items-center gap-1 text-sm font-medium">
           <FileQuestion size={16} />
-          <span>Question {questionIndex + 1}</span>
+          <span>Question {displayIndex + 1}</span> {/* Use display index for numbering */}
         </div>
         <div className="flex items-center gap-2">
           <div className="space-y-2">
@@ -352,6 +369,7 @@ const QuestionCard: FC<CardProps> = ({ questionIndex, questionRefs, form, remove
             name={`questions.${questionIndex}.options.0.correctAnswer`}
             render={({ field }) => (
               <FormItem className="flex-1 h-full">
+                <FormLabel>Correct Answer</FormLabel>
                 <FormControl>
                   <Input {...field} placeholder={"Write correct answer"} />
                 </FormControl>
