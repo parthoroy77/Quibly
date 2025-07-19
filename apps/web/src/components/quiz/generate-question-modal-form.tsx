@@ -27,9 +27,13 @@ import { Slider } from "@quibly/ui/components/slider";
 import { toast } from "@quibly/ui/components/sonner";
 import { Textarea } from "@quibly/ui/components/textarea";
 import { cn } from "@quibly/ui/lib/utils";
-import { useForm, zodResolver } from "@quibly/utils/hook-form";
+import { useForm, UseFormReturn, zodResolver } from "@quibly/utils/hook-form";
 import { QuestionType } from "@quibly/utils/types";
-import { GenerateQuestionFormData, GenerateQuestionValidationSchema } from "@quibly/utils/validations";
+import {
+  CreateQuestionFormData,
+  GenerateQuestionFormData,
+  GenerateQuestionValidationSchema,
+} from "@quibly/utils/validations";
 import { Clock, Loader, Minus, Plus, Sparkles } from "lucide-react";
 import { useState } from "react";
 
@@ -47,7 +51,7 @@ const difficultyOptions = [
   { value: "hard", label: "Hard", color: "text-red-600", bg: "bg-red-50" },
 ];
 
-const GenerateQuestionModalForm = () => {
+const GenerateQuestionModalForm = ({ builderForm }: { builderForm: UseFormReturn<CreateQuestionFormData> }) => {
   const [open, setOpen] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
 
@@ -64,10 +68,20 @@ const GenerateQuestionModalForm = () => {
     try {
       const response = await generateQuestions(data);
       if (response.success) {
+        const generatedQsn = response.data || [];
+        const currentValues = builderForm.getValues("questions");
+        // Merge values in correct order
+        const mergedValues = [
+          ...currentValues,
+          ...generatedQsn?.map((el, i) => ({
+            ...el,
+            index: currentValues.length + i,
+          })),
+        ];
+        builderForm.setValue("questions", mergedValues);
         toast.success(response.message);
-        // TODO: Insert values into form
-        // setOpen(false);
-        // form.reset();
+        setOpen(false);
+        form.reset();
       } else {
         toast.error(response.message);
       }

@@ -40,7 +40,7 @@ const ManageQuizView = ({ quiz }: { quiz: QuizWithQsn }) => {
 
   return (
     <div className="divide-y h-full flex flex-col">
-      <Header title={quiz.title} />
+      <Header title={quiz.title} form={form} />
       <div className="flex justify-between items-center h-full w-full">
         {/* Main quiz question */}
         <QuestionBuilderForm
