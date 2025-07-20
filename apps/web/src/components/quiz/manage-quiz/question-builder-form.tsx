@@ -1,6 +1,19 @@
 import { batchQuestions } from "@/actions/quiz";
-import { createMultipleChoiceOptions, createShortAnswerOption, TRUE_FALSE_OPTIONS } from "@/utilities/quiz";
+import {
+  createMultipleChoiceOptions,
+  createShortAnswerOption,
+  handleAddNewQuestion,
+  TRUE_FALSE_OPTIONS,
+} from "@/utilities/quiz";
 import { Button } from "@quibly/ui/components/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@quibly/ui/components/dropdown-menu";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@quibly/ui/components/form";
 import { Input } from "@quibly/ui/components/input";
 import { Label } from "@quibly/ui/components/label";
@@ -81,7 +94,24 @@ const QuestionBuilderForm: FC<Props> = ({ form, containerRef, questionRefs, sele
         className="h-full overflow-y-scroll flex-1 space-y-5 p-4 w-full scrollbar-hidden"
         ref={containerRef}
       >
-        <div className="flex justify-end gap-3">
+        <div className="flex items-center justify-end gap-3">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant={"secondary"}>
+                <Plus />
+                Add new
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Select Question Type</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              {Object.values(QuestionType).map((x, i) => (
+                <DropdownMenuItem className="capitalize" onClick={() => handleAddNewQuestion(x, form)} key={i}>
+                  {toNormalCase(x)}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
           {!!visibleQuestions.length && (
             <Button disabled={isPending} type="submit" variant={"default"}>
               <SaveAll />

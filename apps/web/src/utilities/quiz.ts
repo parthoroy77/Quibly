@@ -1,3 +1,4 @@
+import { toast } from "@quibly/ui/components/sonner";
 import { UseFormReturn } from "@quibly/utils/hook-form";
 import { QuestionType, QuizWithQsn } from "@quibly/utils/types";
 import { CreateQuestionFormData } from "@quibly/utils/validations";
@@ -75,6 +76,7 @@ export const handleAddNewQuestion = (type: QuestionType, form: UseFormReturn<Cre
   }
 
   form.setValue("questions", [...currentQuestions, baseQuestion]);
+  toast.success("Untitled question added");
 };
 
 export const processQuizDataToFormValues = (quiz: QuizWithQsn): CreateQuestionFormData["questions"] => {

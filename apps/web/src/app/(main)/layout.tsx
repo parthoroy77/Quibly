@@ -7,9 +7,9 @@ const MainLayout = ({ children }: { children: ReactNode }) => {
   return (
     <SidebarProvider className="bg-sidebar p-2">
       <AppSidebar />
-      <main className="flex-1 bg-background h-full rounded-xl overflow-hidden border flex flex-col">
+      <main className="flex-1 bg-background h-full rounded-xl overflow-hidden border flex flex-col relative">
         <AppSidebarHeader />
-        <section className="h-[calc(100svh-16px-48px)] overflow-y-scroll scrollbar-hidden">{children}</section>
+        <section className="h-[calc(100svh-18px-48px)] overflow-y-scroll scrollbar-hidden">{children}</section>
       </main>
     </SidebarProvider>
   );
