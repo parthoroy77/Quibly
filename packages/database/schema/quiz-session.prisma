@@ -1,5 +1,7 @@
 model QuizSession {
   id                   String            @id @default(cuid())
+  title                String
+  description          String?
   quizId               String
   userId               String
   sessionCode          String?
