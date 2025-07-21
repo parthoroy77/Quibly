@@ -1,8 +1,8 @@
-import { AnyZodObject } from "@quibly/utils/validations";
+import { AnyZodObject, ZodTypeAny } from "@quibly/utils/validations";
 import { NextFunction, Request, Response } from "express";
 import asyncHandler from "./asyncHandler";
 
-const zodSafeParse = (schema: AnyZodObject) => {
+const zodSafeParse = (schema: ZodTypeAny) => {
   return asyncHandler(async (req: Request, _res: Response, next: NextFunction) => {
     await schema.parseAsync({
       ...req.body,

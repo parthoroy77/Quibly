@@ -4,8 +4,18 @@ export const CreateQuizSessionSchema = z
   .object({
     quizId: z.string(),
     type: z.enum(["live", "scheduled"]),
-    startTime: z.date().optional(),
+    startTime: z.date(),
     endTime: z.date().optional(),
+    title: z
+      .string()
+      .min(5, { message: "Title must be 5 character long" })
+      .max(200, { message: "Title must not exceed 100 character" }),
+    description: z
+      .string()
+      .max(500, {
+        message: "Description must not exceed 500 character",
+      })
+      .optional(),
   })
   .superRefine((data, ctx) => {
     if (data.type === "scheduled") {
