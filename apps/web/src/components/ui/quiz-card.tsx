@@ -7,16 +7,7 @@ import {
 } from "@quibly/ui/components/dropdown-menu";
 import { Quiz } from "@quibly/utils/types";
 import { formatDistanceToNow } from "date-fns";
-import {
-  CircleFadingPlus,
-  Copy,
-  Ellipsis,
-  FileQuestion,
-  ScrollText,
-  Settings,
-  Settings2,
-  Waypoints,
-} from "lucide-react";
+import { CircleFadingPlus, Copy, Ellipsis, FileQuestion, ScrollText, Settings, Settings2, Sheet } from "lucide-react";
 import Link from "next/link";
 import { FC } from "react";
 import CreateQuizSessionModalForm from "../quiz-session/create-quiz-session-modal-form";
@@ -44,7 +35,7 @@ const QuizCard: FC<Props> = ({ quiz }) => {
           <span>{estimateTime} min</span>
         </div>
         <div className="text-xs inline-flex gap-1 items-center">
-          <Waypoints size={14} />
+          <Sheet size={14} />
           <span>{totalPoints}pts</span>
         </div>
       </div>

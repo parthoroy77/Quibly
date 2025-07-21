@@ -12,6 +12,7 @@ router.post(
   zodSafeParse(QuizSessionValidationSchema),
   QuizSessionControllers.createQuizSession
 );
+router.get("/user", authMiddleware("educator"), QuizSessionControllers.getAllSessionsByUserId);
 
 const QuizSessionRoutes = router;
 

@@ -1,4 +1,11 @@
-import { CorrectAnswer, CorrectMultiSelectOption, Question, QuestionOption, Quiz } from "@quibly/utils/types";
+import {
+  CorrectAnswer,
+  CorrectMultiSelectOption,
+  Question,
+  QuestionOption,
+  Quiz,
+  QuizSession,
+} from "@quibly/utils/types";
 
 type QuestionWithOptions = Question & {
   options: Array<
@@ -12,4 +19,8 @@ type QuestionWithOptions = Question & {
 
 export type QuizWithQsn = Quiz & {
   questions: QuestionWithOptions[];
+};
+
+export type QuizSessionWithQuiz = QuizSession & {
+  quiz: Quiz;
 };

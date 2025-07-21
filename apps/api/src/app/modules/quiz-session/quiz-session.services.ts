@@ -84,6 +84,24 @@ const create = async (
   throw new ApiError(StatusCodes.BAD_REQUEST, "Invalid session type");
 };
 
+const getByUserId = async (userId: string) => {
+  return await db.quizSession.findMany({
+    where: { userId },
+    include: {
+      quiz: {
+        select: {
+          title: true,
+          description: true,
+        },
+      },
+    },
+    orderBy: {
+      updatedAt: "desc",
+    },
+  });
+};
+
 export const QuizSessionServices = {
   create,
+  getByUserId,
 };

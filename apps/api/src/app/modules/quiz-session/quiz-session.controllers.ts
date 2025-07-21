@@ -14,4 +14,13 @@ const createQuizSession = asyncHandler(async (req, res) => {
   });
 });
 
-export const QuizSessionControllers = { createQuizSession };
+const getAllSessionsByUserId = asyncHandler(async (req, res) => {
+  const result = await QuizSessionServices.getByUserId(req.user.id!);
+  ApiResponse(res, {
+    data: result,
+    message: "Sessions retrieved successfully",
+    success: true,
+    statusCode: StatusCodes.OK,
+  });
+});
+export const QuizSessionControllers = { createQuizSession, getAllSessionsByUserId };

@@ -1,5 +1,5 @@
 import { serverFetcher } from "@/lib/server-fetcher";
-import { QuizSession } from "@quibly/utils/types";
+import { QuizSession, QuizSessionWithQuiz } from "@quibly/utils/types";
 import { CreateQuizSessionFormData } from "@quibly/utils/validations";
 
 export const createQuizSession = async (data: CreateQuizSessionFormData) => {
@@ -11,4 +11,9 @@ export const createQuizSession = async (data: CreateQuizSessionFormData) => {
     },
     method: "POST",
   });
+};
+
+export const getUserQuizSessions = async () => {
+  const result = await serverFetcher<QuizSessionWithQuiz[]>("/quiz-sessions/user", { method: "GET" });
+  return result.data || [];
 };
