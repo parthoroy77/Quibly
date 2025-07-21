@@ -151,10 +151,12 @@ const GenerateQuestionModalForm = ({ builderForm }: { builderForm: UseFormReturn
                           {difficultyOptions.map((option) => (
                             <div
                               key={option.value}
-                              className={cn("flex-1 flex items-center space-x-3 px-4 py-2 border-2 rounded-xl")}
+                              className={cn(
+                                "flex-1 flex items-center space-x-3 cursor-pointer px-4 py-2 border-2 rounded-xl"
+                              )}
                             >
                               <RadioGroupItem value={option.value} id={option.value} className="peer" />
-                              <Label htmlFor={option.value} className="cursor-pointer transition-all font-medium">
+                              <Label htmlFor={option.value} className="transition-all font-medium">
                                 {option.label}
                               </Label>
                             </div>
@@ -172,10 +174,10 @@ const GenerateQuestionModalForm = ({ builderForm }: { builderForm: UseFormReturn
                     control={form.control}
                     name="type"
                     render={({ field }) => (
-                      <FormItem className="col-span-2">
+                      <FormItem className="col-span-2 relative">
                         <FormLabel>Question Type</FormLabel>
-                        <FormControl>
-                          <Select onValueChange={field.onChange} defaultValue="mixed">
+                        <FormControl className="h-10">
+                          <Select onValueChange={field.onChange}>
                             <SelectTrigger className="w-full">
                               <SelectValue placeholder="Select quiz type" />
                             </SelectTrigger>
@@ -203,7 +205,7 @@ const GenerateQuestionModalForm = ({ builderForm }: { builderForm: UseFormReturn
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Number of Question</FormLabel>
-                        <FormControl>
+                        <FormControl className="h-9">
                           <div className="flex *:shadow-xs items-center justify-between gap-1 *:border *:rounded-lg">
                             <Button
                               type="button"

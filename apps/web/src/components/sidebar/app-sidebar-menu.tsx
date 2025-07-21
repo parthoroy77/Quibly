@@ -10,8 +10,8 @@ import {
 } from "@quibly/ui/components/sidebar";
 import { cn } from "@quibly/ui/lib/utils";
 import { UserRole } from "@quibly/utils/types";
+import { Icon, IconChartDots3, IconProps } from "@tabler/icons-react";
 import { BadgeCheck, CreditCard, FileStack, Inbox, LucideProps, Send } from "lucide-react";
-import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ForwardRefExoticComponent, RefAttributes } from "react";
@@ -19,7 +19,9 @@ import { ForwardRefExoticComponent, RefAttributes } from "react";
 type NavItem = {
   title: string;
   url: string;
-  icon: ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>;
+  icon:
+    | ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>
+    | ForwardRefExoticComponent<IconProps & RefAttributes<Icon>>;
   role?: UserRole;
 };
 
@@ -33,6 +35,12 @@ const navItems: NavItem[] = [
     title: "Quizzes",
     url: "/quizzes",
     icon: FileStack,
+    role: "educator",
+  },
+  {
+    title: "Quiz Sessions",
+    url: "/quiz-sessions",
+    icon: IconChartDots3,
     role: "educator",
   },
   {
@@ -52,8 +60,7 @@ const navItems: NavItem[] = [
   },
 ];
 
-const AppSidebarMenu = () => {
-  const { data: session } = useSession();
+const AppSidebarMenu = ({ role }: { role: UserRole }) => {
   const pathname = usePathname();
   return (
     <SidebarContent>
@@ -62,7 +69,7 @@ const AppSidebarMenu = () => {
         <SidebarGroupContent className="px-1.5 md:px-0">
           <SidebarMenu>
             {navItems
-              .filter((item) => !item.role || session?.user.role === item.role)
+              .filter((item) => !item.role || role === item.role)
               .map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <Link href={item.url}>

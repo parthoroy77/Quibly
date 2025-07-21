@@ -1,9 +1,11 @@
+import { auth } from "@/lib/auth";
 import { Sidebar, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@quibly/ui/components/sidebar";
 import Logo from "../ui/logo";
 import AppSidebarFooter from "./app-sidebar-footer";
 import AppSidebarMenu from "./app-sidebar-menu";
 
-const AppSidebar = () => {
+const AppSidebar = async () => {
+  const session = await auth();
   return (
     <Sidebar className="border-none *:px-1">
       <SidebarHeader className="h-14 ">
@@ -15,7 +17,7 @@ const AppSidebar = () => {
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
-      <AppSidebarMenu />
+      <AppSidebarMenu role={session?.user.role!} />
       <AppSidebarFooter />
     </Sidebar>
   );

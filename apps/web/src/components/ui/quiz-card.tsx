@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { FC } from "react";
+import CreateQuizSessionModalForm from "../quiz-session/create-quiz-session-modal-form";
 
 interface Props {
   quiz: Quiz & { questionCount: number; estimateTime: number; totalPoints: number };
@@ -77,6 +78,9 @@ const QuizCard: FC<Props> = ({ quiz }) => {
               <DropdownMenuItem>
                 <ScrollText />
                 <span>Leaderboard</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <CreateQuizSessionModalForm quizId={quiz.id} />
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
