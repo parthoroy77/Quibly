@@ -1,6 +1,7 @@
 "use client";
 
 import { getUserQuizzes } from "@/actions/quiz";
+import { createQuizSession } from "@/actions/quiz-session";
 import { Button } from "@quibly/ui/components/button";
 import { DateTimePicker } from "@quibly/ui/components/date-time-picker";
 import {
@@ -12,8 +13,11 @@ import {
   DialogTrigger,
 } from "@quibly/ui/components/dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@quibly/ui/components/form";
+import { Input } from "@quibly/ui/components/input";
 import { RadioGroup, RadioGroupItem } from "@quibly/ui/components/radio-group";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@quibly/ui/components/select";
+import { toast } from "@quibly/ui/components/sonner";
+import { Textarea } from "@quibly/ui/components/textarea";
 import { useForm, zodResolver } from "@quibly/utils/hook-form";
 import type { Quiz } from "@quibly/utils/types";
 import { type CreateQuizSessionFormData, CreateQuizSessionSchema } from "@quibly/utils/validations";
@@ -22,20 +26,32 @@ import { useEffect, useState, useTransition } from "react";
 
 const CreateQuizSessionModalForm = ({ quizId }: { quizId?: string }) => {
   const [quizzes, setQuizzes] = useState<Quiz[]>([]);
-  const [isOpen, setIsOpen] = useState(false);
+  const [open, setOpen] = useState(false);
   const [isLoading, startTransition] = useTransition();
 
   const form = useForm<CreateQuizSessionFormData>({
     resolver: zodResolver(CreateQuizSessionSchema),
     defaultValues: {
       quizId: quizId || "",
+      title: "",
+      description: "",
     },
   });
 
   const sessionType = form.watch("type");
 
   const onSubmit = async (data: CreateQuizSessionFormData) => {
-    startTransition(async () => {});
+    const toastId = toast.loading("Processing your request", { duration: 2000 });
+    startTransition(async () => {
+      const response = await createQuizSession(data);
+      if (response.success && response.data) {
+        toast.success(response.message || "Quiz session created successfully", { id: toastId });
+        setOpen(false);
+        form.reset();
+      } else {
+        toast.error(response.message || "Unable to process request", { id: toastId });
+      }
+    });
   };
 
   useEffect(() => {
@@ -44,14 +60,13 @@ const CreateQuizSessionModalForm = ({ quizId }: { quizId?: string }) => {
       setQuizzes(result);
     };
 
-    if (isOpen) {
+    if (open) {
       fetchQuestions();
     }
-  }, [isOpen]);
-  console.log(form.watch());
+  }, [open]);
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button>
           <IconStack2 size={16} />
@@ -69,6 +84,33 @@ const CreateQuizSessionModalForm = ({ quizId }: { quizId?: string }) => {
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
             {/* Quiz Selection */}
+            <FormField
+              control={form.control}
+              name="title"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Title</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter your quiz session title..." {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Description (Optional)</FormLabel>
+                  <FormControl>
+                    <Textarea placeholder="Write here!" className="min-h-[80px] resize-none bg-sidebar" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
             <FormField
               control={form.control}
               name="quizId"
@@ -108,21 +150,22 @@ const CreateQuizSessionModalForm = ({ quizId }: { quizId?: string }) => {
                       className="flex flex-col *:space-y-0.5"
                     >
                       <div>
-                        <div className="flex border px-4 py-2 bg-sidebar rounded-xl items-center space-x-3 space-y-0">
-                          <RadioGroupItem value="live" />
-                          <FormLabel className="font-normal">Live Session</FormLabel>
-                        </div>
-                        <span className="block text-xs text-muted-foreground">
-                          Students join with a code. You control the quiz live.
-                        </span>
-                      </div>
-                      <div>
-                        <div className="flex border px-4 py-2 bg-sidebar rounded-xl items-center space-x-3 space-y-0">
+                        <div className="flex border px-4 py-2 rounded-xl items-center space-x-3 space-y-0">
                           <RadioGroupItem value="scheduled" />
                           <FormLabel className="font-normal">Scheduled Session</FormLabel>
                         </div>
                         <span className="block text-xs text-muted-foreground">
                           Set a time window. Students take the quiz at their own pace during that period.
+                        </span>
+                      </div>
+                      <div>
+                        <div className="flex border px-4 py-2 rounded-xl items-center space-x-3 space-y-0">
+                          <RadioGroupItem disabled value="live" />
+                          <FormLabel className="font-normal">Live Session</FormLabel>
+                        </div>
+                        <span className="block text-xs text-muted-foreground">
+                          Students join with a code. You control the quiz live.{" "}
+                          <span className="text-destructive">(Currently Unavailable)</span>
                         </span>
                       </div>
                     </RadioGroup>
@@ -166,6 +209,7 @@ const CreateQuizSessionModalForm = ({ quizId }: { quizId?: string }) => {
                           value={field.value}
                           onChange={field.onChange}
                           placeholder={"Select end time of session"}
+                          disableDateBeforeToday
                         />
                       </FormControl>
                       <FormMessage />
@@ -177,7 +221,7 @@ const CreateQuizSessionModalForm = ({ quizId }: { quizId?: string }) => {
 
             {/* Form Actions */}
             <div className="flex justify-end space-x-3 pt-4">
-              <Button type="button" variant="outline" onClick={() => setIsOpen(false)} disabled={isLoading}>
+              <Button type="button" variant="outline" onClick={() => setOpen(false)} disabled={isLoading}>
                 Cancel
               </Button>
               <Button type="submit" disabled={isLoading}>
