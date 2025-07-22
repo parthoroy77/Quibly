@@ -118,14 +118,14 @@ const EducatorFeature = () => {
 const StudentFeature = () => {
   return (
     <motion.div
-      className="relative bg-secondary h-40 p-4 rounded-4xl mt-10 border"
+      className="relative bg-secondary h-fit md:h-40 p-4 rounded-4xl mt-5 border"
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true }}
     >
       <motion.div
         variants={containerVariant}
-        className="grid grid-cols-2 md:grid-cols-4 gap-4 absolute h-fit bottom-5 inset-x-4"
+        className="grid md:grid-cols-4 gap-4 md:absolute h-fit bottom-5 inset-x-4"
       >
         {studentFeatures.map((el, i) => (
           <motion.div

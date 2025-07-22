@@ -5,7 +5,7 @@ const HowItWorks = () => {
   return (
     <section className="mt-20 mb-10">
       <Container className="flex justify-center items-center">
-        <Tabs defaultValue="student" className="mx-auto md:w-4/5">
+        <Tabs defaultValue="educator" className="mx-auto md:w-4/5">
           <div className="flex flex-col gap-2 items-center justify-between">
             <span className="text-3xl font-instrumental-serif font-bold">How It Works</span>
             <TabsList className="bg-secondary">
